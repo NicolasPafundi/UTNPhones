@@ -30,8 +30,7 @@ public class UserController {
     @GetMapping("/GetById/{id}")
     public User GetById(@PathVariable Integer id){
         try{
-            User user= new User();
-            return user;
+            return userService.GetById(id);
         }catch (Exception ex){
            throw ex;
         }
