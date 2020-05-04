@@ -27,9 +27,9 @@ public class User {
 	private UserType userType;
 
 	@OneToMany(mappedBy = "user")
-	@JsonBackReference
+	@JsonBackReference(value="user-phoneLine")
 	private List<PhoneLine> phoneLines;
 	@OneToMany(mappedBy = "user")
-	@JsonBackReference
+	@JsonBackReference(value="user-bill")
 	private List<Bill> bills;
 }

@@ -27,12 +27,12 @@ public class PhoneLine {
 	private PhoneLineType phoneLineType;
 
 	@OneToMany(mappedBy = "phoneLine")
-	@JsonBackReference
+	@JsonBackReference(value="phoneLine-bill")
 	private List<Bill> bills;
 	@OneToMany(mappedBy = "lineFrom")
-	@JsonBackReference
+	@JsonBackReference("phoneLine-callFrom")
 	private List<Call> callsFrom;
 	@OneToMany(mappedBy = "lineTo")
-	@JsonBackReference
+	@JsonBackReference("phoneLine-callTo")
 	private List<Call> callsTo;
 }

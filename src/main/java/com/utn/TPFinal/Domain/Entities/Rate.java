@@ -25,6 +25,6 @@ public class Rate {
 	private City cityTo;
 
 	@OneToMany(mappedBy = "rate")
-	@JsonBackReference
+	@JsonBackReference(value="rate-call")
 	private List<Call> calls;
 }

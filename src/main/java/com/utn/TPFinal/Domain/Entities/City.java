@@ -27,12 +27,12 @@ public class City {
 	@JsonBackReference
 	private List<User> users;
 	@OneToMany(mappedBy = "city")
-	@JsonBackReference
+	@JsonBackReference(value="city-phoneLine")
 	private List<PhoneLine> phoneLines;
 	@OneToMany(mappedBy = "cityFrom")
-	@JsonBackReference
+	@JsonBackReference(value="city-rateFrom")
 	private List<Rate> ratesFrom;
 	@OneToMany(mappedBy = "cityTo")
-	@JsonBackReference
+	@JsonBackReference(value="city-rateTo")
 	private List<Rate> ratesTo;
 }

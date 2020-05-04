@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @PostMapping("/Add")
-    public Integer Add(@RequestBody User newUser){
+    public Integer Add(@RequestBody User user){
         try{
-            return userService.Add(newUser);
+            return userService.Add(user);
         }catch (Exception ex){
             throw ex;
         }

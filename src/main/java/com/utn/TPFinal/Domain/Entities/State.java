@@ -20,6 +20,6 @@ public class State {
 	private String name;
 
 	@OneToMany(mappedBy = "state")
-	@JsonBackReference
+	@JsonBackReference(value="state-city")
 	private List<City> cities;
 }

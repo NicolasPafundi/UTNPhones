@@ -20,6 +20,6 @@ public class UserType {
 	private String name;
 
 	@OneToMany(mappedBy = "userType")
-	@JsonBackReference
+	@JsonBackReference(value="userType-user")
 	private List<User> users;
 }

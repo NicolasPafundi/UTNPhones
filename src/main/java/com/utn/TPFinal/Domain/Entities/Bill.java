@@ -31,6 +31,6 @@ public class Bill {
 	private User user;
 
 	@OneToMany(mappedBy = "bill")
-	@JsonBackReference
+	@JsonBackReference(value="bill-call")
 	private List<Call> calls;
 }

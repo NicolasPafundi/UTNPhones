@@ -20,6 +20,6 @@ public class PhoneLineType {
 	private String name;
 
 	@OneToMany(mappedBy = "phoneLineType")
-	@JsonBackReference
+	@JsonBackReference(value="phoneLineType-phoneLine")
 	private List<PhoneLine> phoneLines;
 }
