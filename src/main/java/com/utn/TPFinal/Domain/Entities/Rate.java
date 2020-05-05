@@ -15,13 +15,16 @@ import java.util.List;
 @Table(name = "rates")
 public class Rate {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
+	@Column(name="price")
 	private double price;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="cityid_from")
 	private City cityFrom;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="cityid_to")
 	private City cityTo;
 
 	@OneToMany(mappedBy = "rate")

@@ -15,15 +15,19 @@ import java.util.List;
 @Table(name = "phonelines")
 public class PhoneLine {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
-	private Integer number;
+	@Column(name="numberline")
+	private Integer numberLine;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
 	private User user;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="city_id")
 	private City city;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="phonelinetype_id")
 	private PhoneLineType phoneLineType;
 
 	@OneToMany(mappedBy = "phoneLine")

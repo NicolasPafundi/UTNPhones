@@ -14,16 +14,24 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="Id")
 	private Integer id;
+	@Column(name="username")
 	private String userName;
+	@Column(name="name")
 	private String firstName;
+	@Column(name="lastname")
 	private String lastName;
+	@Column(name="dni")
 	private String dni;
+	@Column(name="password")
+	private String passwrod;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="city_id")
 	private City city;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="usertype_id")
 	private UserType userType;
 
 	@OneToMany(mappedBy = "user")

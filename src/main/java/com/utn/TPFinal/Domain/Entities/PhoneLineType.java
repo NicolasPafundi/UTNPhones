@@ -12,11 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "phonelinetypes")
+@Table(name = "phonelinetype")
 public class PhoneLineType {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
+	@Column(name="name")
 	private String name;
 
 	@OneToMany(mappedBy = "phoneLineType")

@@ -17,17 +17,24 @@ import javax.persistence.*;
 @Table(name = "bills")
 public class Bill {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
+	@Column(name="calls_amount")
 	private Integer callsAmount;
+	@Column(name="price_cost")
 	private double priceCost;
+	@Column(name="price_final")
 	private double priceFinal;
+	@Column(name="payday")
 	private Date payDay;
+	@Column(name="createdon")
 	private Date createdOn;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="phoneline_id")
 	private PhoneLine phoneLine;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
 	private User user;
 
 	@OneToMany(mappedBy = "bill")
