@@ -18,7 +18,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/GetAll")
+    @GetMapping("/")
     public List<User> GetAll(){
         try{
             return userService.GetAll();
@@ -27,7 +27,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/GetById/{id}")
+    @GetMapping("/{id}")
     public User GetById(@PathVariable Integer id){
         try{
             return userService.GetById(id);
@@ -36,7 +36,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/Add")
+    @PostMapping("/")
     public Integer Add(@RequestBody User user){
         try{
             return userService.Add(user);
@@ -45,7 +45,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/Update")
+    @PutMapping("/")
     public void Update(@RequestBody User user) throws Exception {
         try{
             userService.Update(user);
@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/Remove/{id}")
+    @DeleteMapping("/{id}")
     public void Remove(@PathVariable Integer id){
         try{
             userService.Remove(id);

@@ -1,54 +1,54 @@
 package com.utn.TPFinal.Controllers;
 
 import com.utn.TPFinal.Domain.Entities.*;
-import com.utn.TPFinal.Services.UserTypeService;
+import com.utn.TPFinal.Services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/UserType")
-public class UserTypeController {
+@RequestMapping("/City")
+public class CityController {
 
-    private final UserTypeService userTypeService;
+    private final CityService cityService;
 
     @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
+    public CityController(CityService cityService) {
+        this.cityService = cityService;
     }
 
 
     @GetMapping("/")
-    public List<UserType> GetAll(){
+    public List<City> GetAll(){
         try{
-            return userTypeService.GetAll();
+            return cityService.GetAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public UserType GetById(@PathVariable Integer id){
+    public City GetById(@PathVariable Integer id){
         try{
-            return userTypeService.GetById(id);
+            return cityService.GetById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody UserType userType){
+    public Integer Add(@RequestBody City city){
         try{
-            return userTypeService.Add(userType);
+            return cityService.Add(city);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody UserType userType) throws Exception {
+    public void Update(@RequestBody City city) throws Exception {
         try{
-            userTypeService.Update(userType);
+            cityService.Update(city);
         }catch (Exception ex){
             throw ex;
         }
@@ -57,7 +57,7 @@ public class UserTypeController {
     @DeleteMapping("/{id}")
     public void Remove(@PathVariable Integer id){
         try{
-            userTypeService.Remove(id);
+            cityService.Remove(id);
         }catch (Exception ex){
             throw ex;
         }
