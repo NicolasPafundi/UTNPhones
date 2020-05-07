@@ -1,54 +1,54 @@
 package com.utn.TPFinal.Controllers;
 
 import com.utn.TPFinal.Domain.Entities.*;
-import com.utn.TPFinal.Services.UserTypeService;
+import com.utn.TPFinal.Services.PhoneLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/UserType")
-public class UserTypeController {
+@RequestMapping("/PhoneLine")
+public class PhoneLineController {
 
-    private final UserTypeService userTypeService;
+    private final PhoneLineService phoneLineService;
 
     @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
+    public PhoneLineController(PhoneLineService phoneLineService) {
+        this.phoneLineService = phoneLineService;
     }
 
 
     @GetMapping("/")
-    public List<UserType> GetAll(){
+    public List<PhoneLine> GetAll(){
         try{
-            return userTypeService.GetAll();
+            return phoneLineService.GetAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public UserType GetById(@PathVariable Integer id){
+    public PhoneLine GetById(@PathVariable Integer id){
         try{
-            return userTypeService.GetById(id);
+            return phoneLineService.GetById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody UserType userType){
+    public Integer Add(@RequestBody PhoneLine phoneLine){
         try{
-            return userTypeService.Add(userType);
+            return phoneLineService.Add(phoneLine);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody UserType userType) throws Exception {
+    public void Update(@RequestBody PhoneLine phoneLine) throws Exception {
         try{
-            userTypeService.Update(userType);
+            phoneLineService.Update(phoneLine);
         }catch (Exception ex){
             throw ex;
         }
@@ -57,7 +57,7 @@ public class UserTypeController {
     @DeleteMapping("/{id}")
     public void Remove(@PathVariable Integer id){
         try{
-            userTypeService.Remove(id);
+            phoneLineService.Remove(id);
         }catch (Exception ex){
             throw ex;
         }

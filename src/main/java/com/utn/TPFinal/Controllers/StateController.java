@@ -1,54 +1,54 @@
 package com.utn.TPFinal.Controllers;
 
 import com.utn.TPFinal.Domain.Entities.*;
-import com.utn.TPFinal.Services.UserTypeService;
+import com.utn.TPFinal.Services.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/UserType")
-public class UserTypeController {
+@RequestMapping("/State")
+public class StateController {
 
-    private final UserTypeService userTypeService;
+    private final StateService stateService;
 
     @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
+    public StateController(StateService stateService) {
+        this.stateService = stateService;
     }
 
 
     @GetMapping("/")
-    public List<UserType> GetAll(){
+    public List<State> GetAll(){
         try{
-            return userTypeService.GetAll();
+            return stateService.GetAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public UserType GetById(@PathVariable Integer id){
+    public State GetById(@PathVariable Integer id){
         try{
-            return userTypeService.GetById(id);
+            return stateService.GetById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody UserType userType){
+    public Integer Add(@RequestBody State state){
         try{
-            return userTypeService.Add(userType);
+            return stateService.Add(state);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody UserType userType) throws Exception {
+    public void Update(@RequestBody State state) throws Exception {
         try{
-            userTypeService.Update(userType);
+            stateService.Update(state);
         }catch (Exception ex){
             throw ex;
         }
@@ -57,7 +57,7 @@ public class UserTypeController {
     @DeleteMapping("/{id}")
     public void Remove(@PathVariable Integer id){
         try{
-            userTypeService.Remove(id);
+            stateService.Remove(id);
         }catch (Exception ex){
             throw ex;
         }

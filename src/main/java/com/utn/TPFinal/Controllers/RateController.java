@@ -1,54 +1,54 @@
 package com.utn.TPFinal.Controllers;
 
 import com.utn.TPFinal.Domain.Entities.*;
-import com.utn.TPFinal.Services.UserTypeService;
+import com.utn.TPFinal.Services.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/UserType")
-public class UserTypeController {
+@RequestMapping("/Rate")
+public class RateController {
 
-    private final UserTypeService userTypeService;
+    private final RateService rateService;
 
     @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
+    public RateController(RateService rateService) {
+        this.rateService = rateService;
     }
 
 
     @GetMapping("/")
-    public List<UserType> GetAll(){
+    public List<Rate> GetAll(){
         try{
-            return userTypeService.GetAll();
+            return rateService.GetAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public UserType GetById(@PathVariable Integer id){
+    public Rate GetById(@PathVariable Integer id){
         try{
-            return userTypeService.GetById(id);
+            return rateService.GetById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody UserType userType){
+    public Integer Add(@RequestBody Rate rate){
         try{
-            return userTypeService.Add(userType);
+            return rateService.Add(rate);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody UserType userType) throws Exception {
+    public void Update(@RequestBody Rate rate) throws Exception {
         try{
-            userTypeService.Update(userType);
+            rateService.Update(rate);
         }catch (Exception ex){
             throw ex;
         }
@@ -57,7 +57,7 @@ public class UserTypeController {
     @DeleteMapping("/{id}")
     public void Remove(@PathVariable Integer id){
         try{
-            userTypeService.Remove(id);
+            rateService.Remove(id);
         }catch (Exception ex){
             throw ex;
         }
