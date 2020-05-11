@@ -1,0 +1,159 @@
+/* SP sp_add_call */
+create DEFINER=`root`@`localhost` PROCEDURE sp_add_call(areaCodeFRom INT, numberlinefrom INT, areaCodeTo INT, numberlineto INT, durationmin INT, datecall datetime)
+begin
+	
+	SET @cityIdFrom = 0;
+	SET @cityIdTo = 0;
+	SET @rateId = 0; 
+	SET @linefrom = 0;
+	SET @lineto = 0;
+	SET @minprice = 0.00;
+		
+	/*	SET VARIABLES */
+	select id into @cityIdFrom from cities c2 where arecode = areaCodeFrom;
+	select id into @cityIdTo from cities c2 where arecode = areaCodeTo;
+	select id into @rateId from rates where cityid_from = @cityIdFrom and cityid_to = @cityIdTo;
+	select id into @linefrom from phonelines where numberline = numberlinefrom and city_id = @cityIdFrom;
+	select id into @lineto from phonelines where numberline = numberlineto and city_id = @cityIdTo;
+	select price into @minprice from rates r where id = @rateId;
+	
+	if(@rateId <> 0 and @linefrom <> 0 and @lineto <> 0)then 
+		
+		insert into calls (lineid_from ,lineid_to ,duration , rate_id , amount ,createdon )
+		values (@linefrom, @lineto, durationmin, @rateId, (@minprice * cast(durationmin as DECIMAL(10,2) )), datecall);
+	
+	else
+		if(@rateId = 0) 
+			then signal sqlstate '01000' set MESSAGE_TEXT = 'No existe tarifa para las ciudades de la llamada', MYSQL_ERRNO =  1000; 
+		elseif ( @rateId <> 0 and (@linefrom = 0 or @lineto = 0 ))
+			then signal sqlstate '01000' set MESSAGE_TEXT = 'No existe el numero origen o destino de la llamada', MYSQL_ERRNO =  1000;
+		end if;
+	end if;
+end;
+
+/* 
+Example call
+call sp_add_call(11, 481234, 11, 492345, 10, '2020-01-01 10:11:10.0') 
+
+*/
+/*Trigger to prevent duplicated data*/
+CREATE DEFINER=`root`@`localhost` trigger tbi_crearLlamada before insert on calls for each row 
+begin 
+	if exists (select * from calls c2  where lineid_from = new.lineid_from and lineid_to = new.lineid_to and createdon = new.createdon) then 
+	signal sqlstate '45000'
+	set message_text = 'Llama existente, accion bloqueada';
+	end if;
+end
+
+/*-------------------------- REPORTS --------------------------*/
+/*Call report by user*/
+create DEFINER=`root`@`localhost` procedure sp_llamadasxfechaxusuario (datefrom date,dateto date,userid int )
+begin
+	select 
+		concat(
+			ct.arecode,
+			pl.numberline 
+		) as "Line",
+		concat(
+			ct2.arecode,
+			pl2.numberline
+		) as "Destination",
+		c.createdon as "Date",
+		c.duration as "Min Duration",
+		r.price as "Min Price",
+		c.amount as "Total Amount"
+	from calls c 
+		inner join phonelines pl on c.lineid_from = pl.id 
+		inner join phonelines pl2 on c.lineid_to = pl2.id 
+		inner join cities ct on pl.city_id = ct.id 
+		inner join cities ct2 on pl2.city_id = ct2.id 
+		inner join rates r on c.rate_id = r.id 
+	where pl.user_id = userid and createdon between datefrom and dateto+1;
+end
+
+/*Bills report by user */
+CREATE DEFINER=`root`@`localhost` PROCEDURE `utnphones`.`sp_facturasxfechaxusuario`(datefrom date,dateto date,userid int )
+begin
+	select 
+		b2.id as "Bill Number",
+		b2.phoneline_id as "Line Billed",
+		b2.calls_amount as "Calls Amount",
+		b2.price_cost as "Cost Price",
+		b2.price_final as "Total Price",
+		b2.payday as "Pay Day"		
+	from bills b2 
+	where b2.user_id = userid and createdon between datefrom and dateto+1;
+end
+
+/* Destinos preferidos*/
+create DEFINER=`root`@`localhost` procedure sp_destinosxusuario (userid int )
+begin
+select
+	concat(	ct2.arecode,pl2.numberline) as "Destination",
+	count(c.lineid_to ) as "Call Amount"
+from calls c
+	inner join phonelines pl on c.lineid_from = pl.id 
+	inner join phonelines pl2 on c.lineid_to = pl2.id 
+	inner join cities ct on pl.city_id = ct.id 
+	inner join cities ct2 on pl2.city_id = ct2.id 
+	inner join users u on pl.user_id = u.id 
+where pl.user_id = userid
+group by lineid_to 
+order by count(c.lineid_to ) desc;
+end
+
+/*-------------------------- Bill Action --------------------------*/
+/*Bill Action el Job de Mysql llama una vez por mes al SP sp_monthlybills(), este SP hace un cursor por cada linea y llama al SP sp_facturarllamadasxlinea por cada linea y busca sus llamadas sin facturar   */
+
+/* sp_facturarllamadasxlinea */
+create procedure sp_facturarllamadasxlinea(phonelineid int)
+begin
+	/*Get the call to be billed*/	
+	create temporary table callswithoutbill
+	select id from calls c where c.lineid_from = phonelineid and bill_id is null;
+	
+	/*Create the bill */
+	insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon)
+	select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now()
+	from calls c
+		inner join callswithoutbill temp on c.id = temp.id
+		inner join phonelines pl on c.lineid_from = pl.id 
+	where pl.id = phonelineid and c.bill_id is null
+	group by pl.id ;
+	
+	/*Update the calls billed*/
+	update calls 
+	inner join callswithoutbill temp on calls.id = temp.id
+	set calls.bill_id = LAST_INSERT_ID();	
+	drop table callswithoutbill;
+	
+end
+
+/* sp_monthlybills() */
+
+
+
+create procedure sp_monthlybills()
+BEGIN
+   
+   DECLARE done BOOLEAN DEFAULT 0;
+   DECLARE idtemp INT;
+   
+  
+   DECLARE phonelines_cur CURSOR
+   FOR
+   SELECT id FROM phonelines;
+   
+   DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done=1;
+   
+   OPEN phonelines_cur;
+   
+   REPEAT
+   
+      FETCH phonelines_cur INTO idtemp;
+   		call sp_facturarllamadasxlinea(idtemp);
+   UNTIL done END REPEAT;
+   
+   CLOSE phonelines_cur;
+END;
+
