@@ -1,10 +1,13 @@
 package com.utn.TPFinal.Controllers;
 
+import com.utn.TPFinal.Domain.DTOs.CallFilter;
 import com.utn.TPFinal.Domain.DTOs.CallInput;
 import com.utn.TPFinal.Domain.Entities.*;
+import com.utn.TPFinal.Domain.Projections.UserCall;
 import com.utn.TPFinal.Services.CallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController("")
@@ -32,6 +35,16 @@ public class CallController {
     public Call GetById(@PathVariable Integer id){
         try{
             return callService.GetById(id);
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @PostMapping("/GetByUser")
+    public List<UserCall> GetByUser(@RequestBody CallFilter callFilter){
+        try{
+            List<UserCall> a= callService.GetByUser(callFilter);
+            return a;
         }catch (Exception ex){
             throw ex;
         }

@@ -1,15 +1,18 @@
 package com.utn.TPFinal.Services;
 
-import com.utn.TPFinal.Domain.DTOs.CallInput;
+import com.utn.TPFinal.Domain.DTOs.CallFilter;
 import com.utn.TPFinal.Domain.Entities.Call;
+import com.utn.TPFinal.Domain.Projections.UserCall;
 import com.utn.TPFinal.Repositories.Contracts.ICallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class CallService {
     private final ICallRepository callRepository;
+    private CallFilter callFilter;
 
     @Autowired
     public CallService(ICallRepository callRepository) {
@@ -60,9 +63,10 @@ public class CallService {
         }
     }
 
-    public void New(CallInput call) {
+    public List<UserCall> GetByUser(CallFilter callFilter)
+    {
         try{
-            //callRepository.New(call.getLineFrom().getNumberLine(),call.getLineTo().getNumberLine(),call.getDuration());
+            return callRepository.GetByUser(callFilter.getDateFrom(),callFilter.getDatoTo(),callFilter.getUserId());
         }catch(Exception ex){
             throw ex;
         }
