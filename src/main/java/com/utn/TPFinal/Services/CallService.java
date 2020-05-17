@@ -66,7 +66,7 @@ public class CallService {
     public List<UserCall> GetByUser(CallFilter callFilter)
     {
         try{
-            return callRepository.GetByUser(callFilter.getDateFrom(),callFilter.getDatoTo(),callFilter.getUserId());
+            return callRepository.GetByUser(callFilter.getDateFrom(),callFilter.getDateTo(),callFilter.getUserId());
         }catch(Exception ex){
             throw ex;
         }

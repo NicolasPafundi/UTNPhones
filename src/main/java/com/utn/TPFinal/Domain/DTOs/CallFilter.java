@@ -12,5 +12,5 @@ import java.util.Date;
 public class CallFilter {
     private Integer userId;
     private Date dateFrom;
-    private Date datoTo;
+    private Date dateTo;
 }
