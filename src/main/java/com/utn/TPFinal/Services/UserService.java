@@ -1,6 +1,9 @@
 package com.utn.TPFinal.Services;
 
+import com.utn.TPFinal.Domain.DTOs.LoginInput;
 import com.utn.TPFinal.Domain.Entities.User;
+import com.utn.TPFinal.Exceptions.UserNotexistException;
+import com.utn.TPFinal.Exceptions.ValidationException;
 import com.utn.TPFinal.Repositories.Contracts.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,14 @@ public class UserService {
             return userRepository.findById(Id).get();
         }catch(Exception ex){
             throw ex;
+        }
+    }
+
+    public User GetByUserNameAndPassword(LoginInput loginInput) throws UserNotexistException, ValidationException {
+        if ((loginInput.getUserName() != null) && (loginInput.getPassword() != null)) {
+            return userRepository.GetByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
+        } else {
+            throw new ValidationException("username and password must have a value");
         }
     }
 

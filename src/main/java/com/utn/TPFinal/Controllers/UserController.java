@@ -2,7 +2,10 @@ package com.utn.TPFinal.Controllers;
 
 import com.utn.TPFinal.Domain.Entities.*;
 import com.utn.TPFinal.Services.UserService;
+import com.utn.TPFinal.Session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -11,17 +14,25 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final SessionManager sessionManager;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,SessionManager sessionManager) {
         this.userService = userService;
+        this.sessionManager = sessionManager;
     }
 
 
     @GetMapping("/")
-    public List<User> GetAll(){
+    public ResponseEntity<List<User>> GetAll(@RequestHeader("Authorization") String sessionToken){
         try{
-            return userService.GetAll();
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().equals("Empleado")){
+                return ResponseEntity.ok(userService.GetAll());
+            }else{
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }catch (Exception ex){
             throw ex;
         }
