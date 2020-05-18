@@ -3,11 +3,11 @@ package com.utn.TPFinal.Domain.Projections;
 import java.util.Date;
 
 public interface UserCall {
-    Integer GetId();
-    String GetLine();
-    String GetDestination();
-    Date GetDate();
-    double GetMinDuration();
-    double GetMinPrice();
-    double GetTotalAmount();
+    Integer getId();
+    String getLine();
+    String getDestination();
+    Date getDate();
+    double getMinDuration();
+    double getMinPrice();
+    double getTotalAmount();
 }

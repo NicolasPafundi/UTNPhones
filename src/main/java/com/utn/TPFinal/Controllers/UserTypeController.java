@@ -19,45 +19,45 @@ public class UserTypeController {
 
 
     @GetMapping("/")
-    public List<UserType> GetAll(){
+    public List<UserType> getAll(){
         try{
-            return userTypeService.GetAll();
+            return userTypeService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public UserType GetById(@PathVariable Integer id){
+    public UserType getById(@PathVariable Integer id){
         try{
-            return userTypeService.GetById(id);
+            return userTypeService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody UserType userType){
+    public Integer add(@RequestBody UserType userType){
         try{
-            return userTypeService.Add(userType);
+            return userTypeService.add(userType);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody UserType userType) throws Exception {
+    public void update(@RequestBody UserType userType) throws Exception {
         try{
-            userTypeService.Update(userType);
+            userTypeService.update(userType);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            userTypeService.Remove(id);
+            userTypeService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

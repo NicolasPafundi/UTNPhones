@@ -15,7 +15,7 @@ public class BillService {
         this.billRepository = billRepository;
     }
 
-    public List<Bill> GetAll(){
+    public List<Bill> getAll(){
         try{
             return billRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class BillService {
         }
     }
 
-    public Bill GetById(Integer Id){
+    public Bill getById(Integer Id){
         try{
             return billRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class BillService {
         }
     }
 
-    public int Add(Bill bill){
+    public int add(Bill bill){
         try{
             return billRepository.save(bill).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class BillService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             billRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class BillService {
         }
     }
 
-    public void Update(Bill bill) throws Exception {
+    public void update(Bill bill) throws Exception {
         try {
             if (billRepository.existsById(bill.getId())) {
                 billRepository.save(bill);

@@ -24,12 +24,12 @@ public class UserController {
 
 
     @GetMapping("/")
-    public ResponseEntity<List<User>> GetAll(@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
             if(user!=null && user.getUserType().getName().equals("Empleado")){
-                return ResponseEntity.ok(userService.GetAll());
+                return ResponseEntity.ok(userService.getAll());
             }else{
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
@@ -39,36 +39,36 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User GetById(@PathVariable Integer id){
+    public User getById(@PathVariable Integer id){
         try{
-            return userService.GetById(id);
+            return userService.getById(id);
         }catch (Exception ex){
            throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody User user){
+    public Integer add(@RequestBody User user){
         try{
-            return userService.Add(user);
+            return userService.add(user);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody User user) throws Exception {
+    public void update(@RequestBody User user) throws Exception {
         try{
-            userService.Update(user);
+            userService.update(user);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            userService.Remove(id);
+            userService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

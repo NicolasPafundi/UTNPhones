@@ -19,45 +19,45 @@ public class StateController {
 
 
     @GetMapping("/")
-    public List<State> GetAll(){
+    public List<State> getAll(){
         try{
-            return stateService.GetAll();
+            return stateService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public State GetById(@PathVariable Integer id){
+    public State getById(@PathVariable Integer id){
         try{
-            return stateService.GetById(id);
+            return stateService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody State state){
+    public Integer add(@RequestBody State state){
         try{
-            return stateService.Add(state);
+            return stateService.add(state);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody State state) throws Exception {
+    public void update(@RequestBody State state) throws Exception {
         try{
-            stateService.Update(state);
+            stateService.update(state);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            stateService.Remove(id);
+            stateService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

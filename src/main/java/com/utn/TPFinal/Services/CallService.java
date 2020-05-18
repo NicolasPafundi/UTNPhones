@@ -19,7 +19,7 @@ public class CallService {
         this.callRepository = callRepository;
     }
 
-    public List<Call> GetAll(){
+    public List<Call> getAll(){
         try{
             return callRepository.findAll();
         }catch(Exception ex){
@@ -27,7 +27,7 @@ public class CallService {
         }
     }
 
-    public Call GetById(Integer Id){
+    public Call getById(Integer Id){
         try{
             return callRepository.findById(Id).get();
         }catch(Exception ex){
@@ -35,7 +35,7 @@ public class CallService {
         }
     }
 
-    public int Add(Call call){
+    public int add(Call call){
         try{
             return callRepository.save(call).getId();
         }catch(Exception ex){
@@ -43,7 +43,7 @@ public class CallService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             callRepository.deleteById(Id);
         }catch(Exception ex){
@@ -51,7 +51,7 @@ public class CallService {
         }
     }
 
-    public void Update(Call call) throws Exception {
+    public void update(Call call) throws Exception {
         try {
             if (callRepository.existsById(call.getId())) {
                 callRepository.save(call);
@@ -63,10 +63,10 @@ public class CallService {
         }
     }
 
-    public List<UserCall> GetByUser(CallFilter callFilter)
+    public List<UserCall> getByUser(CallFilter callFilter)
     {
         try{
-            return callRepository.GetByUser(callFilter.getDateFrom(),callFilter.getDateTo(),callFilter.getUserId());
+            return callRepository.getByUser(callFilter.getDateFrom(),callFilter.getDateTo(),callFilter.getUserId());
         }catch(Exception ex){
             throw ex;
         }

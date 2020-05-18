@@ -15,7 +15,7 @@ public class CityService {
         this.cityRepository = cityRepository;
     }
 
-    public List<City> GetAll(){
+    public List<City> getAll(){
         try{
             return cityRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class CityService {
         }
     }
 
-    public City GetById(Integer Id){
+    public City getById(Integer Id){
         try{
             return cityRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class CityService {
         }
     }
 
-    public int Add(City city){
+    public int add(City city){
         try{
             return cityRepository.save(city).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class CityService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             cityRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class CityService {
         }
     }
 
-    public void Update(City city) throws Exception {
+    public void update(City city) throws Exception {
         try {
             if (cityRepository.existsById(city.getId())) {
                 cityRepository.save(city);
@@ -58,4 +58,5 @@ public class CityService {
             throw ex;
         }
     }
+
 }

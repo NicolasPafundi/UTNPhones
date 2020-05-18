@@ -19,45 +19,45 @@ public class PhoneLineTypeController {
 
 
     @GetMapping("/")
-    public List<PhoneLineType> GetAll(){
+    public List<PhoneLineType> getAll(){
         try{
-            return phoneLineTypeService.GetAll();
+            return phoneLineTypeService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public PhoneLineType GetById(@PathVariable Integer id){
+    public PhoneLineType getById(@PathVariable Integer id){
         try{
-            return phoneLineTypeService.GetById(id);
+            return phoneLineTypeService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody PhoneLineType phoneLineType){
+    public Integer add(@RequestBody PhoneLineType phoneLineType){
         try{
-            return phoneLineTypeService.Add(phoneLineType);
+            return phoneLineTypeService.add(phoneLineType);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody PhoneLineType phoneLineType) throws Exception {
+    public void update(@RequestBody PhoneLineType phoneLineType) throws Exception {
         try{
-            phoneLineTypeService.Update(phoneLineType);
+            phoneLineTypeService.update(phoneLineType);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            phoneLineTypeService.Remove(id);
+            phoneLineTypeService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

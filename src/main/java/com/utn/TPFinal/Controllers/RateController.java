@@ -19,45 +19,45 @@ public class RateController {
 
 
     @GetMapping("/")
-    public List<Rate> GetAll(){
+    public List<Rate> getAll(){
         try{
-            return rateService.GetAll();
+            return rateService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public Rate GetById(@PathVariable Integer id){
+    public Rate getById(@PathVariable Integer id){
         try{
-            return rateService.GetById(id);
+            return rateService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody Rate rate){
+    public Integer add(@RequestBody Rate rate){
         try{
-            return rateService.Add(rate);
+            return rateService.add(rate);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody Rate rate) throws Exception {
+    public void update(@RequestBody Rate rate) throws Exception {
         try{
-            rateService.Update(rate);
+            rateService.update(rate);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            rateService.Remove(id);
+            rateService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

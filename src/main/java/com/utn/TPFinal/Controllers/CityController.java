@@ -19,45 +19,45 @@ public class CityController {
 
 
     @GetMapping("/")
-    public List<City> GetAll(){
+    public List<City> getAll(){
         try{
-            return cityService.GetAll();
+            return cityService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public City GetById(@PathVariable Integer id){
+    public City getById(@PathVariable Integer id){
         try{
-            return cityService.GetById(id);
+            return cityService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer Add(@RequestBody City city){
+    public Integer add(@RequestBody City city){
         try{
-            return cityService.Add(city);
+            return cityService.add(city);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody City city) throws Exception {
+    public void update(@RequestBody City city) throws Exception {
         try{
-            cityService.Update(city);
+            cityService.update(city);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            cityService.Remove(id);
+            cityService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

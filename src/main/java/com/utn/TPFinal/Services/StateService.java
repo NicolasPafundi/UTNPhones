@@ -15,7 +15,7 @@ public class StateService {
         this.stateRepository = stateRepository;
     }
 
-    public List<State> GetAll(){
+    public List<State> getAll(){
         try{
             return stateRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class StateService {
         }
     }
 
-    public State GetById(Integer Id){
+    public State getById(Integer Id){
         try{
             return stateRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class StateService {
         }
     }
 
-    public int Add(State state){
+    public int add(State state){
         try{
             return stateRepository.save(state).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class StateService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             stateRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class StateService {
         }
     }
 
-    public void Update(State state) throws Exception {
+    public void update(State state) throws Exception {
         try {
             if (stateRepository.existsById(state.getId())) {
                 stateRepository.save(state);

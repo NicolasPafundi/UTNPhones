@@ -13,6 +13,6 @@ import java.util.List;
 public interface ICallRepository extends JpaRepository<Call, Integer> {
 
     @Query(value = "CALL sp_llamadasxfechaxusuario(:datefrom,:dateto,:userid);", nativeQuery = true)
-    List<UserCall> GetByUser(@Param("datefrom") Date dateFrom, @Param("dateto") Date dateTo, @Param("userid") Integer userId);
+    List<UserCall> getByUser(@Param("datefrom") Date dateFrom, @Param("dateto") Date dateTo, @Param("userid") Integer userId);
 
 }

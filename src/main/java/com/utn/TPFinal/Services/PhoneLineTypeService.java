@@ -15,7 +15,7 @@ public class PhoneLineTypeService {
         this.phoneLineTypeRepository = phoneLineTypeRepository;
     }
 
-    public List<PhoneLineType> GetAll(){
+    public List<PhoneLineType> getAll(){
         try{
             return phoneLineTypeRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class PhoneLineTypeService {
         }
     }
 
-    public PhoneLineType GetById(Integer Id){
+    public PhoneLineType getById(Integer Id){
         try{
             return phoneLineTypeRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class PhoneLineTypeService {
         }
     }
 
-    public int Add(PhoneLineType phoneLineType){
+    public int add(PhoneLineType phoneLineType){
         try{
             return phoneLineTypeRepository.save(phoneLineType).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class PhoneLineTypeService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             phoneLineTypeRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class PhoneLineTypeService {
         }
     }
 
-    public void Update(PhoneLineType phoneLineType) throws Exception {
+    public void update(PhoneLineType phoneLineType) throws Exception {
         try {
             if (phoneLineTypeRepository.existsById(phoneLineType.getId())) {
                 phoneLineTypeRepository.save(phoneLineType);

@@ -23,56 +23,54 @@ public class CallController {
 
 
     @GetMapping("/")
-    public List<Call> GetAll(){
+    public List<Call> getAll(){
         try{
-            return callService.GetAll();
+            return callService.getAll();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public Call GetById(@PathVariable Integer id){
+    public Call getById(@PathVariable Integer id){
         try{
-            return callService.GetById(id);
+            return callService.getById(id);
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/GetByUser")
-    public List<UserCall> GetByUser(@RequestBody CallFilter callFilter){
+    @PostMapping("/getByUser")
+    public List<UserCall> getByUser(@RequestBody CallFilter callFilter){
         try{
-            List<UserCall> a= callService.GetByUser(callFilter);
-            return a;
+          return callService.getByUser(callFilter);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer New(@RequestBody CallInput call){
+    public Integer add(@RequestBody Call call){
         try{
-            return 1;
-            //return callService.New(call);
+           return callService.add(call);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void Update(@RequestBody Call call) throws Exception {
+    public void update(@RequestBody Call call) throws Exception {
         try{
-            callService.Update(call);
+            callService.update(call);
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void Remove(@PathVariable Integer id){
+    public void remove(@PathVariable Integer id){
         try{
-            callService.Remove(id);
+            callService.remove(id);
         }catch (Exception ex){
             throw ex;
         }

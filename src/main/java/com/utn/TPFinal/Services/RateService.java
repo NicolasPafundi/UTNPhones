@@ -15,7 +15,7 @@ public class RateService {
         this.rateRepository = rateRepository;
     }
 
-    public List<Rate> GetAll(){
+    public List<Rate> getAll(){
         try{
             return rateRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class RateService {
         }
     }
 
-    public Rate GetById(Integer Id){
+    public Rate getById(Integer Id){
         try{
             return rateRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class RateService {
         }
     }
 
-    public int Add(Rate rate){
+    public int add(Rate rate){
         try{
             return rateRepository.save(rate).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class RateService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             rateRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class RateService {
         }
     }
 
-    public void Update(Rate rate) throws Exception {
+    public void update(Rate rate) throws Exception {
         try {
             if (rateRepository.existsById(rate.getId())) {
                 rateRepository.save(rate);

@@ -18,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> GetAll(){
+    public List<User> getAll(){
         try{
             return userRepository.findAll();
         }catch(Exception ex){
@@ -26,7 +26,7 @@ public class UserService {
         }
     }
 
-    public User GetById(Integer Id){
+    public User getById(Integer Id){
         try{
             return userRepository.findById(Id).get();
         }catch(Exception ex){
@@ -34,15 +34,15 @@ public class UserService {
         }
     }
 
-    public User GetByUserNameAndPassword(LoginInput loginInput) throws UserNotexistException, ValidationException {
+    public User getByUserNameAndPassword(LoginInput loginInput) throws UserNotexistException, ValidationException {
         if ((loginInput.getUserName() != null) && (loginInput.getPassword() != null)) {
-            return userRepository.GetByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
+            return userRepository.getByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
         } else {
             throw new ValidationException("username and password must have a value");
         }
     }
 
-    public int Add(User user){
+    public int add(User user){
         try{
             return userRepository.save(user).getId();
         }catch(Exception ex){
@@ -50,7 +50,7 @@ public class UserService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             userRepository.deleteById(Id);
         }catch(Exception ex){
@@ -58,7 +58,7 @@ public class UserService {
         }
     }
 
-    public void Update(User user) throws Exception {
+    public void update(User user) throws Exception {
         try {
             if (userRepository.existsById(user.getId())) {
                 userRepository.save(user);

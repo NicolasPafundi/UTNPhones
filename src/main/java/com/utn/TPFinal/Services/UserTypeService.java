@@ -15,7 +15,7 @@ public class UserTypeService {
         this.userTypeRepository = userTypeRepository;
     }
 
-    public List<UserType> GetAll(){
+    public List<UserType> getAll(){
         try{
             return userTypeRepository.findAll();
         }catch(Exception ex){
@@ -23,7 +23,7 @@ public class UserTypeService {
         }
     }
 
-    public UserType GetById(Integer Id){
+    public UserType getById(Integer Id){
         try{
             return userTypeRepository.findById(Id).get();
         }catch(Exception ex){
@@ -31,7 +31,7 @@ public class UserTypeService {
         }
     }
 
-    public int Add(UserType userType){
+    public int add(UserType userType){
         try{
             return userTypeRepository.save(userType).getId();
         }catch(Exception ex){
@@ -39,7 +39,7 @@ public class UserTypeService {
         }
     }
 
-    public void Remove(Integer Id){
+    public void remove(Integer Id){
         try{
             userTypeRepository.deleteById(Id);
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class UserTypeService {
         }
     }
 
-    public void Update(UserType userType) throws Exception {
+    public void update(UserType userType) throws Exception {
         try {
             if (userTypeRepository.existsById(userType.getId())) {
                 userTypeRepository.save(userType);
