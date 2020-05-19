@@ -1,9 +1,9 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.DTOs.ErrorResponseDto;
-import com.utn.TPFinal.Exceptions.InvalidLoginException;
-import com.utn.TPFinal.Exceptions.UserNotexistException;
-import com.utn.TPFinal.Exceptions.ValidationException;
+import com.utn.TPFinal.model.dtos.ErrorResponseDto;
+import com.utn.TPFinal.exceptions.InvalidLoginException;
+import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

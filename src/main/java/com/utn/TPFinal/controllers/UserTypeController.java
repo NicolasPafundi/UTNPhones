@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.Entities.*;
+import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.services.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

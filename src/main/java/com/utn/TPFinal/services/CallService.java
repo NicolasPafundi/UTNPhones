@@ -1,8 +1,9 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.DTOs.CallFilter;
-import com.utn.TPFinal.domain.Entities.Call;
-import com.utn.TPFinal.domain.Projections.UserCall;
+
+import com.utn.TPFinal.model.dtos.CallFilter;
+import com.utn.TPFinal.model.entities.Call;
+import com.utn.TPFinal.model.projections.UserCall;
 import com.utn.TPFinal.repositories.ICallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.Entities.PhoneLineType;
+import com.utn.TPFinal.model.entities.PhoneLineType;
 import com.utn.TPFinal.repositories.IPhoneLineTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

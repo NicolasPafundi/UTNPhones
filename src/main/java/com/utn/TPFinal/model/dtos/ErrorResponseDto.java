@@ -1,4 +1,4 @@
-package com.utn.TPFinal.domain.DTOs;
+package com.utn.TPFinal.model.dtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

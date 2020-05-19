@@ -1,6 +1,6 @@
 package com.utn.TPFinal.repositories;
 
-import com.utn.TPFinal.domain.Entities.User;
+import com.utn.TPFinal.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

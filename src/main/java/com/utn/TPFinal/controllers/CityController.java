@@ -1,10 +1,13 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.Entities.*;
+
+import com.utn.TPFinal.model.entities.City;
 import com.utn.TPFinal.services.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 
 @RestController("")
 @RequestMapping("/City")

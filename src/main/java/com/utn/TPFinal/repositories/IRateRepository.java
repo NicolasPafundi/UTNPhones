@@ -1,6 +1,6 @@
 package com.utn.TPFinal.repositories;
 
-import com.utn.TPFinal.domain.Entities.Rate;
+import com.utn.TPFinal.model.entities.Rate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

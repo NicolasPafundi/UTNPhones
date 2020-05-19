@@ -1,7 +1,7 @@
 package com.utn.TPFinal.repositories;
 
-import com.utn.TPFinal.domain.Entities.Call;
-import com.utn.TPFinal.domain.Projections.UserCall;
+import com.utn.TPFinal.model.entities.Call;
+import com.utn.TPFinal.model.projections.UserCall;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

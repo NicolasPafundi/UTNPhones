@@ -1,4 +1,4 @@
-package com.utn.TPFinal.domain.Projections;
+package com.utn.TPFinal.model.projections;
 
 import java.util.Date;
 

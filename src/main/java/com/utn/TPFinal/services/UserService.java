@@ -1,9 +1,9 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.DTOs.LoginInput;
-import com.utn.TPFinal.domain.Entities.User;
-import com.utn.TPFinal.Exceptions.UserNotexistException;
-import com.utn.TPFinal.Exceptions.ValidationException;
+import com.utn.TPFinal.model.dtos.LoginInput;
+import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

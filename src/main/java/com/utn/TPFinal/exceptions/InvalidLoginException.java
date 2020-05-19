@@ -1,4 +1,4 @@
-package com.utn.TPFinal.Exceptions;
+package com.utn.TPFinal.exceptions;
 
 public class InvalidLoginException extends Throwable {
     public InvalidLoginException(Throwable cause) {

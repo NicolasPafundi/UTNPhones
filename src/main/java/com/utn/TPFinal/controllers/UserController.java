@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.Entities.*;
+import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.UserService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;

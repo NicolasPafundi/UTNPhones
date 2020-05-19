@@ -1,6 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.Entities.Rate;
+import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.repositories.IRateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

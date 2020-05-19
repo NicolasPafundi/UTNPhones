@@ -1,6 +1,6 @@
 package com.utn.TPFinal.repositories;
 
-import com.utn.TPFinal.domain.Entities.PhoneLine;
+import com.utn.TPFinal.model.entities.PhoneLine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

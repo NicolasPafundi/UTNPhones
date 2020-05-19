@@ -1,6 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.Entities.State;
+import com.utn.TPFinal.model.entities.State;
 import com.utn.TPFinal.repositories.IStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

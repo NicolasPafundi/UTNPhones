@@ -1,8 +1,8 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.DTOs.CallFilter;
-import com.utn.TPFinal.domain.Entities.*;
-import com.utn.TPFinal.domain.Projections.UserCall;
+import com.utn.TPFinal.model.dtos.CallFilter;
+import com.utn.TPFinal.model.entities.*;
+import com.utn.TPFinal.model.projections.UserCall;
 import com.utn.TPFinal.services.CallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

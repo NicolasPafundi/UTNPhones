@@ -1,6 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.Entities.UserType;
+import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.repositories.IUserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

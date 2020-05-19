@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.Entities.*;
+import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.services.RateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

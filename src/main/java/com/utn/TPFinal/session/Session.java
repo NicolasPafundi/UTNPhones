@@ -1,6 +1,6 @@
 package com.utn.TPFinal.session;
 
-import com.utn.TPFinal.domain.Entities.User;
+import com.utn.TPFinal.model.entities.User;
 
 import java.util.Date;
 

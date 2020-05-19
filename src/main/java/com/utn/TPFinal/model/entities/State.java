@@ -1,4 +1,4 @@
-package com.utn.TPFinal.domain.Entities;
+package com.utn.TPFinal.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;

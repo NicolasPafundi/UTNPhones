@@ -1,10 +1,10 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.domain.DTOs.LoginInput;
-import com.utn.TPFinal.domain.Entities.User;
-import com.utn.TPFinal.Exceptions.InvalidLoginException;
-import com.utn.TPFinal.Exceptions.UserNotexistException;
-import com.utn.TPFinal.Exceptions.ValidationException;
+import com.utn.TPFinal.model.dtos.LoginInput;
+import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.exceptions.InvalidLoginException;
+import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.services.UserService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;

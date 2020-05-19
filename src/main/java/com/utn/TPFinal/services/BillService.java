@@ -1,6 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.domain.Entities.Bill;
+import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.repositories.IBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
