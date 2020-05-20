@@ -1,9 +1,8 @@
 package com.utn.TPFinal.services;
 
 
-import com.utn.TPFinal.model.dtos.CallFilter;
+import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.Call;
-import com.utn.TPFinal.model.projections.UserCall;
 import com.utn.TPFinal.repositories.ICallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import java.util.List;
 @Service
 public class CallService {
     private final ICallRepository callRepository;
-    private CallFilter callFilter;
+    private MobileReportFilter mobileReportFilter;
 
     @Autowired
     public CallService(ICallRepository callRepository) {
@@ -59,15 +58,6 @@ public class CallService {
             } else {
                 throw new Exception("Invalid Id");
             }
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public List<UserCall> getByUser(CallFilter callFilter)
-    {
-        try{
-            return callRepository.getByUser(callFilter.getDateFrom(),callFilter.getDateTo(),callFilter.getUserId());
         }catch(Exception ex){
             throw ex;
         }

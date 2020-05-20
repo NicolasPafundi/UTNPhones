@@ -9,7 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CallFilter {
+public class MobileReportFilter {
     private Integer userId;
     private Date dateFrom;
     private Date dateTo;

@@ -2,8 +2,7 @@ package com.utn.TPFinal.model.projections;
 
 import java.util.Date;
 
-public interface UserCall {
-    Integer getId();
+public interface MobileReportUserCalls {
     String getLine();
     String getDestination();
     Date getDate();
