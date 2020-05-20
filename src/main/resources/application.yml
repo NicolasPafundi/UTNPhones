@@ -2,4 +2,4 @@ spring:
   datasource:
     url: jdbc:mysql://db4free.net:3306/utnphonenpmr
     username: npmradmin
-    password: npmr2o2o
+    password: 79ed10e1
