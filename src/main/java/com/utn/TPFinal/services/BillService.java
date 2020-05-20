@@ -23,6 +23,14 @@ public class BillService {
         }
     }
 
+    public List<Bill> getByUserID(Integer id){
+        try {
+            return billRepository.findByUserId(id);
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
     public Bill getById(Integer Id){
         try{
             return billRepository.findById(Id).get();

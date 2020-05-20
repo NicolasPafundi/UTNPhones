@@ -159,3 +159,13 @@ BEGIN
    CLOSE phonelines_cur;
 END;
 
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CallsByUser`(userid int )
+begin
+	select
+		c2.*
+	from calls c2
+	inner join phonelines p2 on c2.lineid_from = p2.id
+	inner join users u2 on p2.user_id = u2.id
+	where u2.id = userid;
+end

@@ -62,4 +62,12 @@ public class CallService {
             throw ex;
         }
     }
+
+    public List<Call> getByUserId(Integer id) {
+        try{
+            return callRepository.getByUserId(id);
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
 }

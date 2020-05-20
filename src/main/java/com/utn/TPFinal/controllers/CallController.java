@@ -37,6 +37,15 @@ public class CallController {
         }
     }
 
+    @GetMapping("/User/{id}")
+    public List<Call> getByUserId(@PathVariable Integer id){
+        try{
+            return callService.getByUserId(id);
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
     @PostMapping("/")
     public Integer add(@RequestBody Call call){
         try{
