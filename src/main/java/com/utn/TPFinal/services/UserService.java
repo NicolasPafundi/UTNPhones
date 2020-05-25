@@ -8,6 +8,7 @@ import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,6 +27,14 @@ public class UserService {
         }
     }
 
+    public List<User> getAllByUserType(Integer userTypeId){
+        try{
+            return userRepository.getAllByUserType(userTypeId);
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
+
     public User getById(Integer Id){
         try{
             return userRepository.findById(Id).get();
@@ -36,7 +45,8 @@ public class UserService {
 
     public User getByUserNameAndPassword(LoginInput loginInput) throws UserNotexistException, ValidationException {
         if ((loginInput.getUserName() != null) && (loginInput.getPassword() != null)) {
-            return userRepository.getByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
+            User user= userRepository.getByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
+            return Optional.ofNullable(user).orElseThrow(() -> new UserNotexistException());
         } else {
             throw new ValidationException("username and password must have a value");
         }

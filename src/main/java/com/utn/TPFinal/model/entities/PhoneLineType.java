@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "phonelinetype")
 public class PhoneLineType {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
 	@Column(name="name")

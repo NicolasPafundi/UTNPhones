@@ -31,6 +31,14 @@ public class PhoneLineService {
         }
     }
 
+    public List<PhoneLine> getByUser(Integer userId){
+        try{
+            return phoneLineRepository.getByUser(userId);
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
+
     public int add(PhoneLine phoneLine){
         try{
             return phoneLineRepository.save(phoneLine).getId();

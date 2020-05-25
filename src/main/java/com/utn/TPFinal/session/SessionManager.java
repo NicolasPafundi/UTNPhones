@@ -32,7 +32,7 @@ public class SessionManager {
     public void expireSessions() {
         for (String k : sessionMap.keySet()) {
             Session v = sessionMap.get(k);
-            if (v.getLastAction().getTime() < System.currentTimeMillis() + (sesionExpiration*1000)) {
+            if (v.getLastAction().getTime() + (sesionExpiration * 1000) < System.currentTimeMillis()) {
                 System.out.println("Expiring session " + k);
                 sessionMap.remove(k);
             }

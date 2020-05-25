@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "rates")
 public class Rate {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
 	@Column(name="price")

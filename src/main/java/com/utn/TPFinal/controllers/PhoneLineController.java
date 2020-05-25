@@ -1,63 +1,113 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.PhoneLine;
+import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.PhoneLineService;
+import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/PhoneLine")
+@RequestMapping("/api/PhoneLine")
 public class PhoneLineController {
 
     private final PhoneLineService phoneLineService;
+    private final SessionManager sessionManager;
 
     @Autowired
-    public PhoneLineController(PhoneLineService phoneLineService) {
+    public PhoneLineController(PhoneLineService phoneLineService, SessionManager sessionManager) {
         this.phoneLineService = phoneLineService;
+        this.sessionManager = sessionManager;
     }
 
-
     @GetMapping("/")
-    public List<PhoneLine> getAll(){
+    public ResponseEntity<List<PhoneLine>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
-            return phoneLineService.getAll();
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                List<PhoneLine> phoneLines = phoneLineService.getAll();
+                return (phoneLines.size() > 0) ? ResponseEntity.ok(phoneLines) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public PhoneLine getById(@PathVariable Integer id){
+    public ResponseEntity<PhoneLine> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            return phoneLineService.getById(id);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                PhoneLine phoneLine = phoneLineService.getById(id);
+                return (phoneLine != null) ? ResponseEntity.ok(phoneLine) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/User/{id}")
+    public ResponseEntity<List<PhoneLine>> getByUserId(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+        try{
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId()==id){
+                List<PhoneLine> phoneLines = phoneLineService.getByUser(id);
+                return (phoneLines.size() > 0) ? ResponseEntity.ok(phoneLines) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer add(@RequestBody PhoneLine phoneLine){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine){
         try{
-            return phoneLineService.add(phoneLine);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                return ResponseEntity.status(HttpStatus.CREATED).body(phoneLineService.add(phoneLine));
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void update(@RequestBody PhoneLine phoneLine) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception {
         try{
-            phoneLineService.update(phoneLine);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                phoneLineService.update(phoneLine);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            phoneLineService.remove(id);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                phoneLineService.remove(id);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }

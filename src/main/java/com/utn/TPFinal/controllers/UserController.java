@@ -1,5 +1,6 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.UserService;
 import com.utn.TPFinal.session.SessionManager;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/User")
+@RequestMapping("/api/User")
 public class UserController {
 
     private final UserService userService;
@@ -28,47 +29,88 @@ public class UserController {
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
-            if(user!=null && user.getUserType().getName().equals("Empleado")){
-                return ResponseEntity.ok(userService.getAll());
-            }else{
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                List<User> users = userService.getAll();
+                return (users.size() > 0) ? ResponseEntity.ok(users) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/UserType/{id}")
+    public ResponseEntity<List<User>> getAllByUserType(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+        try{
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                List<User> users = userService.getAllByUserType(id);
+                return (users.size() > 0) ? ResponseEntity.ok(users) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Integer id){
+    public ResponseEntity<User> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            return userService.getById(id);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == id)){
+                User userResult = userService.getById(id);
+                return (userResult != null) ? ResponseEntity.ok(userResult) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
            throw ex;
         }
     }
 
     @PostMapping("/")
-    public Integer add(@RequestBody User user){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser){
         try{
-            return userService.add(user);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                return ResponseEntity.status(HttpStatus.CREATED).body(userService.add(newUser));
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @PutMapping("/")
-    public void update(@RequestBody User user) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception {
         try{
-            userService.update(user);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == userUpdate.getId())){
+                userService.update(userUpdate);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            userService.remove(id);
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == id)){
+                userService.remove(id);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
             throw ex;
         }

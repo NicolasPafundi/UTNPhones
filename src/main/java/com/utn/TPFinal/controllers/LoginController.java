@@ -33,7 +33,7 @@ public class LoginController {
             User u = userService.getByUserNameAndPassword(loginInput);
             String token = sessionManager.createSession(u);
             response = ResponseEntity.ok().headers(createHeaders(token)).build();
-        } catch (UserNotexistException e) {
+        } catch (Exception e) {
             throw new InvalidLoginException(e);
         }
         return response;
