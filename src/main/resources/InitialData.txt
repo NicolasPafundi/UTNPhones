@@ -1,5 +1,6 @@
-ALTER TABLE utnphones.phonelines CHANGE `number` numberline int(11) NOT NULL;
-ALTER TABLE utnphones.users ADD password varchar(10) NOT NULL;
+ALTER TABLE phonelines CHANGE `number` numberline int(11) NOT NULL;
+ALTER TABLE users ADD password varchar(10) NOT NULL;
+ALTER TABLE phonelines ADD active BIT DEFAULT 1 NOT NULL;
 
 INSERT INTO STATES (name)
 Values

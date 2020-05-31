@@ -1,5 +1,6 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.User;
@@ -28,12 +29,12 @@ public class MobileReportController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping("/getCallsByUserByDate")
-    public ResponseEntity<List<MobileReportUserCalls>> getCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody MobileReportFilter mobileReportFilter){
+    @PostMapping("/callsByUserByDate")
+    public ResponseEntity<List<MobileReportUserCalls>> getCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == mobileReportFilter.getUserId())){
+            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()))){
                 List<MobileReportUserCalls> mobileReportUserCalls = mobileReportService.getCallsByUserByDate(mobileReportFilter);
                 return (mobileReportUserCalls.size() > 0) ? ResponseEntity.ok(mobileReportUserCalls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
@@ -58,13 +59,13 @@ public class MobileReportController {
         }
     }
 
-    @PostMapping("/getDestinationRankByUser")
-    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter){
+    @GetMapping("/getDestinationRankByUser/{userId}")
+    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer userId) throws UserNotexistException {
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == mobileReportFilter.getUserId())){
-                List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(mobileReportFilter);
+            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()))){
+                List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(userId);
                 return (mobileReportUserCallsRank.size() > 0) ? ResponseEntity.ok(mobileReportUserCallsRank) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

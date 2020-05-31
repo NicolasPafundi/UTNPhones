@@ -47,9 +47,11 @@ end
 
 /*-------------------------- REPORTS --------------------------*/
 /*Call report by user*/
-create procedure sp_getCallsByUserByDate (datefrom date,dateto date,userid int )
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getCallsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
 begin
-	select 
+select
     	c.id as "Id",
 		concat(
 			ct.arecode,
@@ -63,32 +65,38 @@ begin
 		c.duration as "MinDuration",
 		r.price as "MinPrice",
 		c.amount as "TotalAmount"
-	from calls c 
-		inner join phonelines pl on c.lineid_from = pl.id 
-		inner join phonelines pl2 on c.lineid_to = pl2.id 
-		inner join cities ct on pl.city_id = ct.id 
-		inner join cities ct2 on pl2.city_id = ct2.id 
-		inner join rates r on c.rate_id = r.id 
+	from calls c
+		inner join phonelines pl on c.lineid_from = pl.id
+		inner join phonelines pl2 on c.lineid_to = pl2.id
+		inner join cities ct on pl.city_id = ct.id
+		inner join cities ct2 on pl2.city_id = ct2.id
+		inner join rates r on c.rate_id = r.id
 	where pl.user_id = userid and createdon between datefrom and dateto+1;
-end
+end$$
+DELIMITER ;
 
 /*Bills report by user */
-CREATE PROCEDURE `utnphones`.`sp_getBillsByUserByDate`(datefrom date,dateto date,userid int )
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getBillsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
 begin
-	select 
-		b2.id as "Bill Number",
-		b2.phoneline_id as "Line Billed",
-		b2.calls_amount as "Calls Amount",
-		b2.price_cost as "Cost Price",
-		b2.price_final as "Total Price",
-		b2.payday as "Pay Day"		
-	from bills b2 
+select
+	b2.id as "Bill Number",
+	b2.phoneline_id as "Line Billed",
+	b2.calls_amount as "Calls Amount",
+	b2.price_cost as "Cost Price",
+	b2.price_final as "Total Price",
+	b2.payday as "Pay Day"
+	from bills b2
 	where b2.user_id = userid and createdon between datefrom and dateto+1;
-end
+end$$
+DELIMITER ;
+
 
 /* Destinos preferidos*/
-drop procedure sp_getDestinationRankByUser
-create procedure sp_getDestinationRankByUser (userid int )
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getDestinationRankByUser`(IN `userid` INT)
 begin
 select
 	concat(	ct2.arecode,pl2.numberline) as "Destination",
@@ -102,14 +110,18 @@ from calls c
 where pl.user_id = userid
 group by lineid_to
 order by count(c.lineid_to) desc;
-end
-call sp_getDestinationRankByUser(3)
+end$$
+DELIMITER ;
+
 /*-------------------------- Bill Action --------------------------*/
 /*Bill Action el Job de Mysql llama una vez por mes al SP sp_monthlybills(), este SP hace un cursor por cada linea y llama al SP sp_billingCallbyline por cada linea y busca sus llamadas sin facturar   */
 
 /* sp_facturarllamadasxlinea */
-create procedure sp_billingCallByLine(phonelineid int)
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_billingCallByLine`(IN `phonelineid` INT)
 begin
+
 	/*Get calls to be billed*/
 	create temporary table callswithoutbill
 	select id from calls c where c.lineid_from = phonelineid and bill_id is null;
@@ -129,14 +141,14 @@ begin
 	set calls.bill_id = LAST_INSERT_ID();
 	drop table callswithoutbill;
 
-end
+end$$
+DELIMITER ;
 
 /* sp_monthlybills() */
 
-drop procedure sp_monthlyBills
-
-create procedure sp_monthlyBills()
-BEGIN
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_monthlyBills`()
+begin
 
    DECLARE done BOOLEAN DEFAULT 0;
    DECLARE idtemp INT;
@@ -155,9 +167,12 @@ BEGIN
       FETCH phonelines_cur INTO idtemp;
    		call sp_billingCallByLine(idtemp);
    UNTIL done END REPEAT;
-   
+
    CLOSE phonelines_cur;
-END;
+
+end$$
+DELIMITER ;
+
 
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CallsByUser`(userid int )
