@@ -29,7 +29,6 @@ public class MobileReportService {
     {
         User user = userRepository.findById(mobileReportFilter.getUserId()).orElseThrow(()->new UserNotexistException());
         return mobileReportRepository.getCallsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
-
     }
 
     public List<MobileReportUserBills> getBillsByUserByDate(MobileReportFilter mobileReportFilter)
