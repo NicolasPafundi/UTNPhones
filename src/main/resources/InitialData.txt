@@ -149,9 +149,11 @@ VALUES
 (10,10,5.00);
 
 insert into usertypes (name) values ('Empleado'),('Cliente'),('Infraestructura');
+insert into phonelinetype (name ) values ('Residencial'),('Movil');
 
-insert into users (name,lastname ,username ,dni ,usertype_id ,city_id,password ) 
-values 
+
+insert into users (name,lastname ,username ,dni ,usertype_id ,city_id,password )
+values
 ('Walter','Garcia','wgarcia',12345678,1,1,'123456'),
 ('infra','infra','infra',11111111,3,1,'qaz12345'),
 ('Leopoldo','Lopez','llopez',12345679,2,1,'123456'),
@@ -162,10 +164,7 @@ values
 ('Gustavo','Gomez','ggomez',12345684,2,6,'123456'),
 ('Marcela','Mendez','mmendez',12345685,2,6,'123456'),
 ('Lautaro','Lolen','llolen',12345686,2,9,'123456'),
-('Natalia','Nanote','nnanote',12345687,2,11,'123456');
-
-insert into phonelinetype (name ) values ('Residencial'),('Movil');
-
+('Natalia','Nanote','nnanote',12345687,2,10,'123456');
 
 /*Revisar UsersID creados*/
 insert into phonelines (numberline, city_id ,user_id ,phonelinetype_id )
@@ -179,3 +178,20 @@ values
 (438525,6,9,1),
 (449781,9,10,2),
 (456451,9,11,1);
+
+insert into calls (lineid_from ,lineid_to ,duration ,rate_id ,amount ,createdon )
+select p.id,p2.id,10,r.id ,(r.price * 10), now()
+from phonelines p cross join phonelines p2
+inner join rates r on r.cityid_from = p.id and r.cityid_to = p2.id;
+
+delete from calls where lineid_from = lineid_to;
+
+insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon)
+select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now()
+from calls c
+inner join phonelines pl on c.lineid_from = pl.id
+where c.bill_id is null
+group by pl.id ;
+
+update calls
+set calls.bill_id = calls.lineid_from;
