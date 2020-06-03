@@ -1,9 +1,11 @@
 package com.utn.TPFinal.services;
 
 
-import com.utn.TPFinal.model.dtos.MobileReportFilter;
+import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.entities.Call;
+import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.repositories.ICallRepository;
+import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,12 @@ import java.util.List;
 @Service
 public class CallService {
     private final ICallRepository callRepository;
-    private MobileReportFilter mobileReportFilter;
+    private final IUserRepository userRepository;
 
     @Autowired
-    public CallService(ICallRepository callRepository) {
+    public CallService(ICallRepository callRepository, IUserRepository userRepository) {
         this.callRepository = callRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Call> getAll(){
@@ -67,6 +70,18 @@ public class CallService {
         try{
             return callRepository.getByUserId(id);
         }catch(Exception ex){
+            throw ex;
+        }
+    }
+
+    public Call getLastCallByDni(String dni) {
+        try {
+            User user = userRepository.findByDni(dni);
+            if (user != null) {
+               return callRepository.getLastCallByUserId(user.getDni());
+            }
+            return null;
+        } catch (Exception ex) {
             throw ex;
         }
     }

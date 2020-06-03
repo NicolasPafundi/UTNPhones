@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IUserRepository extends JpaRepository<User, Integer> {
@@ -14,4 +15,6 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "SELECT * FROM users WHERE usertype_id= ?1", nativeQuery = true)
     List<User> getAllByUserType(Integer userTypeId);
+
+    User findByDni(String dni);
 }

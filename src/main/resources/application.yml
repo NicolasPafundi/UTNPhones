@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: jdbc:mysql://db4free.net:3306/utnphonenpmr
-    username: npmradmin
-    password: 79ed10e1
+    url: jdbc:mysql://localhost:3306/utnphones
+    username: root
+    password: sasa

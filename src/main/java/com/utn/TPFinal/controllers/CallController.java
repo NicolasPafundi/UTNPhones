@@ -1,5 +1,6 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.*;
 import com.utn.TPFinal.services.CallService;
@@ -107,6 +108,21 @@ public class CallController {
             if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.INFRAESTRUCTURA.name())){
                 callService.remove(id);
                 return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/lastCallByDni/{dni}")
+    public ResponseEntity<Call> getLastCallByDni(@RequestHeader("Authorization") String sessionToken,@PathVariable String dni) throws UserNotexistException {
+        try{
+            User user = sessionManager.getCurrentUser(sessionToken);
+
+            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
+                Call call= callService.getLastCallByDni(dni);
+                return (call != null) ? ResponseEntity.ok(call) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
