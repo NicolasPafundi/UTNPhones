@@ -1,6 +1,12 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.model.Enum.PhonelineType;
+import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.PhoneLine;
+import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.model.projections.MobileReportUserCalls;
 import com.utn.TPFinal.repositories.IPhoneLineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +40,24 @@ public class PhoneLineService {
     public List<PhoneLine> getByUser(Integer userId){
         try{
             return phoneLineRepository.getByUser(userId);
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
+
+    public Integer getCantCellphoneLines()
+    {
+        try{
+            return getPhoneLineByPhoneLineType(PhonelineType.MOVIL.name()).size();
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
+
+    private List<PhoneLine> getPhoneLineByPhoneLineType(String phonelineType)
+    {
+        try{
+            return phoneLineRepository.getPhoneLineByPhoneLineType(phonelineType);
         }catch(Exception ex){
             throw ex;
         }

@@ -1,8 +1,11 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.PhoneLine;
 import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.model.projections.MobileReportUserCalls;
 import com.utn.TPFinal.services.PhoneLineService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,16 @@ public class PhoneLineController {
                 return (phoneLine != null) ? ResponseEntity.ok(phoneLine) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/GetCantCellphoneLines")
+    public ResponseEntity<Integer> getCantCellphoneLines(@RequestHeader("Authorization") String sessionToken) {
+        try{
+            Integer cellphoneLines = phoneLineService.getCantCellphoneLines();
+            return ResponseEntity.ok(cellphoneLines);
         }catch (Exception ex){
             throw ex;
         }

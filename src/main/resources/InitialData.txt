@@ -149,7 +149,7 @@ VALUES
 (10,10,5.00);
 
 insert into usertypes (name) values ('Empleado'),('Cliente'),('Infraestructura');
-insert into phonelinetype (name ) values ('Residencial'),('Movil');
+insert into phonelinetype (name ) values ('RESIDENCIAL'),('MOVIL');
 
 
 insert into users (name,lastname ,username ,dni ,usertype_id ,city_id,password )
