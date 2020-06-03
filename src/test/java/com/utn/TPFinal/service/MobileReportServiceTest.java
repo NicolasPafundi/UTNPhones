@@ -1,4 +1,4 @@
-package com.utn.TPFinal.Service;
+package com.utn.TPFinal.service;
 
 import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;

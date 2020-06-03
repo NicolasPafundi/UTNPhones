@@ -1,7 +1,7 @@
 package com.utn.TPFinal.model.projections;
 
 public interface MobileReportUserCallsRank {
-    Integer getDestination();
+    String getDestination();
     Integer getCallAmount();
 
 }

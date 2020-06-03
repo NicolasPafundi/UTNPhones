@@ -1,6 +1,7 @@
 package com.utn.TPFinal.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,9 @@ public class User {
 	private String lastName;
 	@Column(name="dni")
 	private String dni;
+	@JsonIgnore
 	@Column(name="password")
-	private String passwrod;
+	private String password;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="city_id")

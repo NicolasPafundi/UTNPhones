@@ -1,5 +1,6 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.model.entities.User;
@@ -26,7 +27,7 @@ public class BillController {
     }
 
     @GetMapping("/User/{id}")
-    public ResponseEntity<List<Bill>> getByUserID(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+    public ResponseEntity<List<Bill>> getByUserID(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws UserNotexistException {
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 

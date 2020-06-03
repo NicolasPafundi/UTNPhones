@@ -44,8 +44,8 @@ public class MobileReportController {
         }
     }
 
-    @PostMapping("/getBillsByUserByDate")
-    public ResponseEntity<List<MobileReportUserBills>> getBillsByUserByDate(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter){
+    @PostMapping("/billsByUserByDate")
+    public ResponseEntity<List<MobileReportUserBills>> getBillsByUserByDate(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
@@ -59,7 +59,7 @@ public class MobileReportController {
         }
     }
 
-    @GetMapping("/getDestinationRankByUser/{userId}")
+    @GetMapping("/destinationRankByUser/{userId}")
     public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer userId) throws UserNotexistException {
         try{
             User user = sessionManager.getCurrentUser(sessionToken);

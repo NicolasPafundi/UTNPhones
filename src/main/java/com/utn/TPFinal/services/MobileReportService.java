@@ -31,13 +31,12 @@ public class MobileReportService {
         return mobileReportRepository.getCallsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
     }
 
-    public List<MobileReportUserBills> getBillsByUserByDate(MobileReportFilter mobileReportFilter)
+    public List<MobileReportUserBills> getBillsByUserByDate(MobileReportFilter mobileReportFilter) throws  UserNotexistException
     {
-        try{
-            return mobileReportRepository.getBillsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
-        }catch(Exception ex){
-            throw ex;
-        }
+        Integer ui = mobileReportFilter.getUserId();
+        User user = userRepository.findById(ui).orElseThrow(()->new UserNotexistException());
+        return mobileReportRepository.getBillsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
+
     }
 
     public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId) throws UserNotexistException

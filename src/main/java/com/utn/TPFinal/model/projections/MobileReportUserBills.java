@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface MobileReportUserBills {
     Integer getBillNumber();
-    Integer getLineNumber();
+    String getLineNumber();
     Integer getCallsAmount();
     double getCostPrice();
     double getTotalPrice();

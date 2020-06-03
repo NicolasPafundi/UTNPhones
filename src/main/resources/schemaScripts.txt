@@ -82,10 +82,11 @@ CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getBillsByUserByDate`(IN `datefrom`
 begin
 select
 	b2.id as "Bill Number",
-	b2.phoneline_id as "Line Billed",
+	concat( c2.arecode + pl.numberline) as "Line Billed",
 	b2.calls_amount as "Calls Amount",
 	b2.price_cost as "Cost Price",
 	b2.price_final as "Total Price",
+	b2.createdon as "Creation Day",
 	b2.payday as "Pay Day"
 	from bills b2
 	where b2.user_id = userid and createdon between datefrom and dateto+1;
