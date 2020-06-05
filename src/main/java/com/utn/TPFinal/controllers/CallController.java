@@ -1,7 +1,11 @@
 package com.utn.TPFinal.controllers;
 
+import com.sun.istack.Nullable;
+import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.model.dtos.CallInput;
 import com.utn.TPFinal.model.entities.*;
+import com.utn.TPFinal.model.projections.InfraResponse;
 import com.utn.TPFinal.services.CallService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +45,7 @@ public class CallController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Call> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<Call> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption {
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
@@ -56,7 +60,7 @@ public class CallController {
     }
 
     @GetMapping("/User/{id}")
-    public ResponseEntity<List<Call>> getByUserId(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<List<Call>> getByUserId(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption{
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
@@ -71,12 +75,12 @@ public class CallController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call){
+    public ResponseEntity<InfraResponse> add(@RequestHeader("Authorization") String sessionToken, @RequestBody CallInput call){
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
             if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.INFRAESTRUCTURA.name())){
-                return ResponseEntity.status(HttpStatus.CREATED).body(callService.add(call));
+                return ResponseEntity.status(HttpStatus.CREATED).body(callService.createCall(call));
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }catch (Exception ex){
@@ -100,7 +104,7 @@ public class CallController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption{
         try{
             User user = sessionManager.getCurrentUser(sessionToken);
 
