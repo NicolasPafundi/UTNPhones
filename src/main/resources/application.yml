@@ -1,8 +1,5 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-  jpa:
-    show-sql: true
+  datasource:
+    url: jdbc:mysql://db4free.net:3306/utnphonenpmr
+    username: npmradmin
+    password: 79ed10e1
