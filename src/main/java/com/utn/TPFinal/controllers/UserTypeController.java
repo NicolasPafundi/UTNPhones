@@ -25,75 +25,50 @@ public class UserTypeController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/Employee/")
     public ResponseEntity<List<UserType>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                List<UserType> userTypes = userTypeService.getAll();
-                return (userTypes.size() > 0) ? ResponseEntity.ok(userTypes) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<UserType> userTypes = userTypeService.getAll();
+            return (userTypes.size() > 0) ? ResponseEntity.ok(userTypes) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/Employee/{id}")
     public ResponseEntity<UserType> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                UserType userType = userTypeService.getById(id);
-                return (userType != null) ? ResponseEntity.ok(userType) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            UserType userType = userTypeService.getById(id);
+            return (userType != null) ? ResponseEntity.ok(userType) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/Employee/")
     public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                return ResponseEntity.status(HttpStatus.CREATED).body(userTypeService.add(userType));
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(userTypeService.add(userType));
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PutMapping("/")
+    @PutMapping("/Employee/")
     public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws Exception {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                userTypeService.update(userType);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            userTypeService.update(userType);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Employee/{id}")
     public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                userTypeService.remove(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            userTypeService.remove(id);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }

@@ -148,7 +148,7 @@ VALUES
 (10,9,7.00),
 (10,10,5.00);
 
-insert into usertypes (name) values ('Empleado'),('Cliente'),('Infraestructura');
+insert into usertypes (name) values ('EMPLOYEE'),('CLIENT'),('INFRAESTRUCTURE');
 insert into phonelinetype (name ) values ('Residencial'),('Movil');
 
 

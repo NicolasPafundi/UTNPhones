@@ -26,16 +26,22 @@ public class BillController {
         this.sessionManager = sessionManager;
     }
 
-    @GetMapping("/User/{id}")
+    @GetMapping("/Employee/User/{id}")
     public ResponseEntity<List<Bill>> getByUserID(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws UserNotexistException {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
+            List<Bill> bills = billService.getByUserID(id);
+            return (bills.size() > 0) ? ResponseEntity.ok(bills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
 
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == id)){
-                List<Bill> bills = billService.getByUserID(id);
-                return (bills.size() > 0) ? ResponseEntity.ok(bills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    @GetMapping("/Client/CurrentUser")
+    public ResponseEntity<List<Bill>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws UserNotexistException {
+        try{
+            Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
+            List<Bill> bills = billService.getByUserID(userId);
+            return (bills.size() > 0) ? ResponseEntity.ok(bills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }

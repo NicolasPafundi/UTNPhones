@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,46 +30,43 @@ public class MobileReportController {
         this.sessionManager = sessionManager;
     }
 
-    @PostMapping("/callsByUserByDate")
+    @PostMapping("/Employee/callsByUserByDate")
     public ResponseEntity<List<MobileReportUserCalls>> getCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()))){
-                List<MobileReportUserCalls> mobileReportUserCalls = mobileReportService.getCallsByUserByDate(mobileReportFilter);
-                return (mobileReportUserCalls.size() > 0) ? ResponseEntity.ok(mobileReportUserCalls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<MobileReportUserCalls> mobileReportUserCalls = mobileReportService.getCallsByUserByDate(mobileReportFilter);
+            return (mobileReportUserCalls.size() > 0) ? ResponseEntity.ok(mobileReportUserCalls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/billsByUserByDate")
+    @PostMapping("/Employee/billsByUserByDate")
     public ResponseEntity<List<MobileReportUserBills>> getBillsByUserByDate(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == mobileReportFilter.getUserId())){
-                List<MobileReportUserBills> mobileReportUserBills = mobileReportService.getBillsByUserByDate(mobileReportFilter);
-                return (mobileReportUserBills.size() > 0) ? ResponseEntity.ok(mobileReportUserBills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<MobileReportUserBills> mobileReportUserBills = mobileReportService.getBillsByUserByDate(mobileReportFilter);
+            return (mobileReportUserBills.size() > 0) ? ResponseEntity.ok(mobileReportUserBills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @GetMapping("/destinationRankByUser/{userId}")
+    @PostMapping("/Client/billsByCurrentUserByDate")
+    public ResponseEntity<List<MobileReportUserBills>> getBillsByCurrentUserByDate(@RequestHeader("Authorization") String sessionToken,@PathVariable Date dateFrom,@PathVariable Date dateTo ) throws UserNotexistException{
+        try{
+            Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
+            MobileReportFilter mobileReportFilter = new MobileReportFilter(userId,dateFrom,dateTo);
+            List<MobileReportUserBills> mobileReportUserBills = mobileReportService.getBillsByUserByDate(mobileReportFilter);
+            return (mobileReportUserBills.size() > 0) ? ResponseEntity.ok(mobileReportUserBills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @GetMapping("/Employee/destinationRankByUser/{userId}")
     public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer userId) throws UserNotexistException {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()))){
-                List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(userId);
-                return (mobileReportUserCallsRank.size() > 0) ? ResponseEntity.ok(mobileReportUserCallsRank) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(userId);
+            return (mobileReportUserCallsRank.size() > 0) ? ResponseEntity.ok(mobileReportUserCallsRank) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }

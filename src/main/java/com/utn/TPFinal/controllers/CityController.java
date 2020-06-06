@@ -27,7 +27,7 @@ public class CityController {
         this.sessionManager = sessionManager;
     }
 
-    @GetMapping("/State/{id}")
+    @GetMapping("/Client/State/{id}")
     public ResponseEntity<List<City>> getAllByState(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
         try{
             List<City> cities = cityService.getAllByState(id);
@@ -37,60 +37,40 @@ public class CityController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/Employee/{id}")
     public ResponseEntity<City> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                City city = cityService.getById(id);
-                return (city != null) ? ResponseEntity.ok(city) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            City city = cityService.getById(id);
+            return (city != null) ? ResponseEntity.ok(city) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/Employee/")
     public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody City city){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                return ResponseEntity.status(HttpStatus.CREATED).body(cityService.add(city));
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(cityService.add(city));
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PutMapping("/")
+    @PutMapping("/Employee/")
     public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                cityService.update(city);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            cityService.update(city);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Employee/{id}")
     public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                cityService.remove(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            cityService.remove(id);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }

@@ -25,75 +25,50 @@ public class RateController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/Employee/")
     public ResponseEntity<List<Rate>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                List<Rate> rates = rateService.getAll();
-                return (rates.size() > 0) ? ResponseEntity.ok(rates) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<Rate> rates = rateService.getAll();
+            return (rates.size() > 0) ? ResponseEntity.ok(rates) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/Employee/{id}")
     public ResponseEntity<Rate> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                Rate rate = rateService.getById(id);
-                return (rate != null) ? ResponseEntity.ok(rate) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            Rate rate = rateService.getById(id);
+            return (rate != null) ? ResponseEntity.ok(rate) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/Employee/")
     public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                return ResponseEntity.status(HttpStatus.CREATED).body(rateService.add(rate));
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(rateService.add(rate));
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PutMapping("/")
+    @PutMapping("/Employee/")
     public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws Exception {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                rateService.update(rate);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            rateService.update(rate);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Employee/{id}")
     public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                rateService.remove(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            rateService.remove(id);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }

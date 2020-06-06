@@ -1,6 +1,5 @@
 package com.utn.TPFinal.controllers;
 
-import com.sun.istack.Nullable;
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.dtos.CallInput;
@@ -29,90 +28,71 @@ public class CallController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/Employee/")
     public ResponseEntity<List<Call>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                List<Call> calls = callService.getAll();
-                return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<Call> calls = callService.getAll();
+            return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/Employee/{id}")
     public ResponseEntity<Call> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name())){
-                Call call= callService.getById(id);
-                return (call != null) ? ResponseEntity.ok(call) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            Call call= callService.getById(id);
+            return (call != null) ? ResponseEntity.ok(call) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @GetMapping("/User/{id}")
+    @GetMapping("/Employee/User/{id}")
     public ResponseEntity<List<Call>> getByUserId(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption{
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && (user.getUserType().getName().toUpperCase().equals(UserTypeEnum.EMPLEADO.name()) || user.getId() == id)){
-                List<Call> calls = callService.getByUserId(id);
-                return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            List<Call> calls = callService.getByUserId(id);
+            return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PostMapping("/")
+    @GetMapping("/Client/CurrentUser")
+    public ResponseEntity<List<Call>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourseNoExistExeption{
+        try{
+            Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
+            List<Call> calls = callService.getByUserId(userId);
+            return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @PostMapping("/Infrastructure/")
     public ResponseEntity<InfraResponse> add(@RequestHeader("Authorization") String sessionToken, @RequestBody CallInput call){
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.INFRAESTRUCTURA.name())){
-                return ResponseEntity.status(HttpStatus.CREATED).body(callService.createCall(call));
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(callService.createCall(call));
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @PutMapping("/")
+    @PutMapping("/Infrastructure/")
     public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call) throws Exception {
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.INFRAESTRUCTURA.name())){
-                callService.update(call);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            callService.update(call);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/Infrastructure/{id}")
     public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourseNoExistExeption{
         try{
-            User user = sessionManager.getCurrentUser(sessionToken);
-
-            if(user!=null && user.getUserType().getName().toUpperCase().equals(UserTypeEnum.INFRAESTRUCTURA.name())){
-                callService.remove(id);
-                return ResponseEntity.ok().build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            callService.remove(id);
+            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
