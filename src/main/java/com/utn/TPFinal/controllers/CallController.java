@@ -3,8 +3,11 @@ package com.utn.TPFinal.controllers;
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.dtos.CallInput;
+import com.utn.TPFinal.model.dtos.CallsReportFilter;
+import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.*;
 import com.utn.TPFinal.model.projections.InfraResponse;
+import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import com.utn.TPFinal.services.CallService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +61,18 @@ public class CallController {
         }
     }
 
+    @PostMapping("/Employee/reportCallsByUserByDate")
+    public  ResponseEntity<List<ReportCallsByUserByDate>> getReportCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody CallsReportFilter callsReportFilter) throws ResourseNoExistExeption{
+        try{
+            Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
+            List<ReportCallsByUserByDate> calls = callService.getReportCallsByUserByDate(callsReportFilter);
+            return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
     @GetMapping("/Client/CurrentUser")
     public ResponseEntity<List<Call>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourseNoExistExeption{
         try{
@@ -97,4 +112,5 @@ public class CallController {
             throw ex;
         }
     }
+
 }

@@ -5,16 +5,19 @@ import com.sun.istack.Nullable;
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.exceptions.UserNotexistException;
 import com.utn.TPFinal.model.dtos.CallInput;
+import com.utn.TPFinal.model.dtos.CallsReportFilter;
 import com.utn.TPFinal.model.entities.Call;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.InfraResponse;
 import com.utn.TPFinal.model.projections.MobileReportUserCallsRank;
+import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import com.utn.TPFinal.repositories.ICallRepository;
 import com.utn.TPFinal.repositories.IUserRepository;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -73,5 +76,10 @@ public class CallService {
 
         User user = userRepository.findById(id).orElseThrow(()->new ResourseNoExistExeption());
         return callRepository.getByUserId(id);
+    }
+
+    public List<ReportCallsByUserByDate> getReportCallsByUserByDate(CallsReportFilter callsReportFilter) throws ResourseNoExistExeption {
+        User user = userRepository.findById(callsReportFilter.getUserId()).orElseThrow(()->new ResourseNoExistExeption());
+        return callRepository.getReportCallsByUserByDate(callsReportFilter.getUserId(),callsReportFilter.getDateFrom(),callsReportFilter.getDateTo());
     }
 }

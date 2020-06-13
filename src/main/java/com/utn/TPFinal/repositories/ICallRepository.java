@@ -1,9 +1,11 @@
 package com.utn.TPFinal.repositories;
 
 import com.sun.istack.Nullable;
+import com.utn.TPFinal.model.dtos.CallsReportFilter;
 import com.utn.TPFinal.model.entities.Call;
 import com.utn.TPFinal.model.projections.InfraResponse;
 import com.utn.TPFinal.model.projections.MobileReportUserBills;
+import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,5 +25,8 @@ public interface ICallRepository extends JpaRepository<Call, Integer> {
 
     @Query(value = " CALL sp_add_call(:numberlinefrom, :numberlineto, :durationmin, :datecall);", nativeQuery = true)
     InfraResponse createCall(@Param("numberlinefrom") Integer numberFrom, @Param("numberlineto") Integer numberTo , @Param("durationmin") double duration, @Param("datecall") Date callDate);
+
+    @Query(value = " CALL sp_reportCallsByUserByDate(:userid,:datefrom,:dateto);", nativeQuery = true)
+    List<ReportCallsByUserByDate> getReportCallsByUserByDate(@Param("userid") Integer userId,@Param("datefrom") Date dateFrom, @Param("dateto") Date dateTo );
 
 }

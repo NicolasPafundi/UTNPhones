@@ -1,14 +1,19 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.model.projections.MobileReportUserBills;
+import com.utn.TPFinal.model.projections.RatesReport;
 import com.utn.TPFinal.services.RateService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Null;
 import java.util.List;
 
 @RestController("")
@@ -73,4 +78,20 @@ public class RateController {
             throw ex;
         }
     }
+
+    @GetMapping("/Employee/ratesBetweenAreaCodes/{areaCodeFrom}/{areaCodeTo}")
+    public ResponseEntity<List<RatesReport>> getRatesBetweenAreaCodes(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer areaCodeFrom, @PathVariable Integer areaCodeTo) throws ResourseNoExistExeption {
+        try{
+            if(areaCodeTo == 0) {
+                areaCodeTo = null;
+            }
+            List<RatesReport> report = rateService.getRatesBetweenAreaCodes(areaCodeFrom,areaCodeTo);
+            return (report.size() > 0)? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        }catch (Exception ex){
+            throw new ResourseNoExistExeption();
+        }
+    }
+
+
 }

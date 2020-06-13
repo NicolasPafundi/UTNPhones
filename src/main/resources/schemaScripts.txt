@@ -4,38 +4,38 @@ begin
 
 
 	SET @areaCodeFrom = LEFT(numberlinefrom, LENGTH(numberlinefrom)-6);
-	SET @numberlinefrom = SUBSTRING(numberlinefrom ,-6);
-	SET @areaCodeTo = LEFT(numberlineto, LENGTH(numberlineto)-6);
-	SET @numberlineto = SUBSTRING(numberlineto ,-6);
-	SET @cityIdFrom = 0;
-	SET @cityIdTo = 0;
-	SET @rateId = 0;
-	SET @linefrom = 0;
-	SET @lineto = 0;
-	SET @minprice = 0.00;
+    	SET @numberlinefrom = SUBSTRING(numberlinefrom ,-6);
+    	SET @areaCodeTo = LEFT(numberlineto, LENGTH(numberlineto)-6);
+    	SET @numberlineto = SUBSTRING(numberlineto ,-6);
+    	SET @cityIdFrom = 0;
+    	SET @cityIdTo = 0;
+    	SET @rateId = 0;
+    	SET @linefrom = 0;
+    	SET @lineto = 0;
+    	SET @minprice = 0.00;
 
-	/*	SET VARIABLES */
-	select id into @cityIdFrom from cities c2 where arecode = @areaCodeFrom;
-	select id into @cityIdTo from cities c2 where arecode = @areaCodeTo;
-	select id into @rateId from rates where cityid_from = @cityIdFrom and cityid_to = @cityIdTo;
-	select id into @linefrom from phonelines where numberline = @numberlinefrom and city_id = @cityIdFrom;
-	select id into @lineto from phonelines where numberline = @numberlineto and city_id = @cityIdTo;
-	select price into @minprice from rates r where id = @rateId;
+    	/*	SET VARIABLES */
+    	select id into @cityIdFrom from cities c2 where arecode = @areaCodeFrom;
+    	select id into @cityIdTo from cities c2 where arecode = @areaCodeTo;
+    	select id into @rateId from rates where cityid_from = @cityIdFrom and cityid_to = @cityIdTo;
+    	select id into @linefrom from phonelines where numberline = @numberlinefrom and city_id = @cityIdFrom and active = 1;
+    	select id into @lineto from phonelines where numberline = @numberlineto and city_id = @cityIdTo and active = 1;
+    	select price into @minprice from rates r where id = @rateId;
 
-	if(@rateId <> 0 and @linefrom <> 0 and @lineto <> 0)then
+    	if(@rateId <> 0 and @linefrom <> 0 and @lineto <> 0)then
 
-		insert into calls (lineid_from ,lineid_to ,duration , rate_id , amount ,createdon )
-		values (@linefrom, @lineto, durationmin, @rateId, (@minprice * cast(durationmin as DECIMAL(10,2) )), datecall);
-		SELECT LAST_INSERT_ID() as 'CallId','Llamada creada'as'Message',now()as 'CreatedOn';
+    		insert into calls (lineid_from ,lineid_to ,duration , rate_id , amount ,createdon )
+    		values (@linefrom, @lineto, durationmin, @rateId, (@minprice * cast(durationmin as DECIMAL(10,2) )), datecall);
+    		SELECT * from calls c where id = LAST_INSERT_ID();
 
-	else
-		if(@rateId = 0)
-			then signal sqlstate '01000' set MESSAGE_TEXT = 'No existe tarifa para las ciudades de la llamada', MYSQL_ERRNO =  1000;
+    	else
+    		if(@rateId = 0)
+    			then signal sqlstate '01000' set MESSAGE_TEXT = 'No existe tarifa para las ciudades de la llamada', MYSQL_ERRNO =  1000;
 
-		elseif ( @rateId <> 0 and (@linefrom = 0 or @lineto = 0 ))
-			then signal sqlstate '01000' set MESSAGE_TEXT = 'No existe el numero origen o destino de la llamada', MYSQL_ERRNO =  1000;
-		end if;
-	end if;
+    		elseif ( @rateId <> 0 and (@linefrom = 0 or @lineto = 0 ))
+    			then signal sqlstate '01000' set MESSAGE_TEXT = 'No es posible crear la llamada, las lineas telefonicas no existen o se encuentran desactivadas', MYSQL_ERRNO =  1000;
+    		end if;
+    	end if;
 end;
 /* 
 Example call
@@ -191,3 +191,67 @@ begin
 	inner join users u2 on p2.user_id = u2.id
 	where u2.id = userid;
 end
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_reportCallsByUserByDate`(userid int,datefrom date,dateto date )
+begin
+	select
+        concat(
+            ct.arecode,
+            pl.numberline
+        ) as "NumeroOrigen",
+        ct.name as "CiudadOrigen",
+        concat(
+            ct2.arecode,
+            pl2.numberline
+        ) as "NumeroDestino",
+        ct2.name as "CiudadDestino",
+        c.amount as "PrecioTotal",
+        c.duration as "Duracion",
+        c.createdon as "FechaLlamada"
+    from calls c
+        inner join phonelines pl on c.lineid_from = pl.id
+        inner join phonelines pl2 on c.lineid_to = pl2.id
+        inner join cities ct on pl.city_id = ct.id
+        inner join cities ct2 on pl2.city_id = ct2.id
+        inner join rates r on c.rate_id = r.id
+    where pl.user_id = userid and createdon between datefrom and dateto+1;
+end$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_ratesBetweenAreaCodes`(areaCodefrom int, areaCodeTo int )
+begin
+
+	SET @areaCodeIdFrom = 0;
+	SET @areaCodeIdTo = 0;
+
+	select id into @areaCodeIdFrom from cities c where arecode = areaCodeFrom;
+
+	if ( areaCodeTo is null ) then
+		set @areaCodeIdTo = -1;
+	else
+		select id into @areaCodeIdTo from cities c where arecode = areaCodeTo;
+	end if;
+
+	if ( @areaCodeIdFrom > 0 and @areaCodeIdTo > 0 ) then
+
+    		select ctf.name as 'Origen' , ctt.name as 'Destino' , r.price as 'Precio'
+    		from rates r
+    		inner join cities ctf on r.cityid_from = ctf.id
+    		inner join cities ctt on r.cityid_to = ctt.id
+    		where cityid_from = @areaCodeIdFrom and cityid_to = @areaCodeIdTo;
+
+   	elseif ( @areaCodeIdFrom <> 0 and @areaCodeIdTo = -1 )	then
+
+    		select ctf.name as 'Origen' , ctt.name as 'Destino' , r.price as 'Precio'
+    		from rates r
+    		inner join cities ctf on r.cityid_from = ctf.id
+    		inner join cities ctt on r.cityid_to = ctt.id
+    		where cityid_from = @areaCodeIdFrom;
+
+    else
+   			signal sqlstate '01000' set MESSAGE_TEXT = 'Ciudad Origen incorrecta o no existente', MYSQL_ERRNO =  1000;
+    end if;
+end$$
+DELIMITER ;
