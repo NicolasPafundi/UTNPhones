@@ -1,5 +1,6 @@
 /* SP sp_add_call */
-CREATE DEFINER=`root`@`localhost` PROCEDURE `utnphones`.`sp_add_call`(numberlinefrom INT, numberlineto INT, durationmin INT, datecall datetime)
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_add_call`(numberlinefrom INT, numberlineto INT, durationmin INT, datecall datetime)
 begin
 
 
@@ -36,7 +37,9 @@ begin
     			then signal sqlstate '01000' set MESSAGE_TEXT = 'No es posible crear la llamada, las lineas telefonicas no existen o se encuentran desactivadas', MYSQL_ERRNO =  1000;
     		end if;
     	end if;
-end;
+end$$
+DELIMITER ;
+
 /* 
 Example call
 call sp_add_call(11, 481234, 11, 492345, 10, '2020-01-01 10:11:10.0') 
