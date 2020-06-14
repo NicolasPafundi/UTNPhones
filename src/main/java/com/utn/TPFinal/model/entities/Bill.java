@@ -30,6 +30,9 @@ public class Bill {
 	private Date payDay;
 	@Column(name="createdon")
 	private Date createdOn;
+	@Column(name="paid")
+	private boolean paid;
+
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="phoneline_id")

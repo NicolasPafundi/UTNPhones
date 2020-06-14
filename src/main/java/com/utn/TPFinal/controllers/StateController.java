@@ -1,8 +1,7 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.State;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.StateService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +54,11 @@ public class StateController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody State state) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody State state) throws Exception, ValidationException {
         try{
             stateService.update(state);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

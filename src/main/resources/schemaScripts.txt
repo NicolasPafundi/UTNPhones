@@ -106,7 +106,7 @@ DELIMITER ;
 /* Destinos preferidos*/
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getDestinationRankByUser`(IN `userid` INT)
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getDestinationRankByUser`(IN `userid` INT, IN `top` INT)
 begin
 select
 	concat(	ct2.arecode,pl2.numberline) as "Destination",
@@ -119,7 +119,8 @@ from calls c
 	inner join users u on pl.user_id = u.id
 where pl.user_id = userid
 group by lineid_to
-order by count(c.lineid_to) desc;
+order by count(c.lineid_to) desc
+LIMIT top;
 end$$
 DELIMITER ;
 

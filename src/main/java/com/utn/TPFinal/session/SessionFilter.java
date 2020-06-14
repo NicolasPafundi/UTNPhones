@@ -1,6 +1,6 @@
 package com.utn.TPFinal.session;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class SessionFilter extends OncePerRequestFilter {
         User user = sessionManager.getCurrentUser(sessionToken);
         String url = request.getRequestURI();
         String filter = url.split("/")[3];
-        if (user != null && (filter.toUpperCase().equals(UserTypeEnum.CLIENT.name()) || user.getUserType().getName().toUpperCase().equals(filter.toUpperCase()))) {
+        if (user != null && (filter.toUpperCase().equals(UserTypes.CLIENT.name()) || user.getUserType().getName().name().equals(filter.toUpperCase()))) {
             filterChain.doFilter(request, response);
         } else {
             response.setStatus(HttpStatus.FORBIDDEN.value());

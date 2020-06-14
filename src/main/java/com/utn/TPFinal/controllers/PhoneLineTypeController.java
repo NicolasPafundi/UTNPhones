@@ -1,8 +1,7 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLineType;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.PhoneLineTypeService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +54,11 @@ public class PhoneLineTypeController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType) throws Exception, ValidationException {
         try{
             phoneLineTypeService.update(phoneLineType);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

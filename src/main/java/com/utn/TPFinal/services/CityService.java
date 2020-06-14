@@ -1,10 +1,11 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
-import com.utn.TPFinal.model.entities.State;
 import com.utn.TPFinal.repositories.ICityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -48,12 +49,12 @@ public class CityService {
         }
     }
 
-    public void update(City city) throws Exception {
+    public void update(City city) throws ValidationException, Exception {
         try {
             if (cityRepository.existsById(city.getId())) {
                 cityRepository.save(city);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

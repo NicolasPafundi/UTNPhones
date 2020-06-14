@@ -1,10 +1,8 @@
 package com.utn.TPFinal.controllers;
 
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.Rate;
-import com.utn.TPFinal.model.entities.User;
-import com.utn.TPFinal.model.projections.MobileReportUserBills;
 import com.utn.TPFinal.model.projections.RatesReport;
 import com.utn.TPFinal.services.RateService;
 import com.utn.TPFinal.session.SessionManager;
@@ -13,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 @RestController("")
@@ -60,11 +57,11 @@ public class RateController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws Exception, ValidationException {
         try{
             rateService.update(rate);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

@@ -148,8 +148,8 @@ VALUES
 (10,9,7.00),
 (10,10,5.00);
 
-insert into usertypes (name) values ('EMPLOYEE'),('CLIENT'),('INFRAESTRUCTURE');
-insert into phonelinetype (name ) values ('Residencial'),('Movil');
+insert into usertypes (name) values ('EMPLOYEE'),('CLIENT'),('INFRASTRUCTURE');
+insert into phonelinetype (name ) values ('LANDLINE'),('MOVIL');
 
 
 insert into users (name,lastname ,username ,dni ,usertype_id ,city_id,password )
@@ -186,8 +186,8 @@ inner join rates r on r.cityid_from = p.id and r.cityid_to = p2.id;
 
 delete from calls where lineid_from = lineid_to;
 
-insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon)
-select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now()
+insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon,paid)
+select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now(),0
 from calls c
 inner join phonelines pl on c.lineid_from = pl.id
 where c.bill_id is null

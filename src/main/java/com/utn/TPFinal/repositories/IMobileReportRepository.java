@@ -20,8 +20,8 @@ public interface IMobileReportRepository extends JpaRepository<Call,Integer> {
     @Query(value = "CALL sp_getBillsByUserByDate(:datefrom,:dateto,:userid);", nativeQuery = true)
     List<MobileReportUserBills> getBillsByUserByDate(@Param("datefrom") Date dateFrom, @Param("dateto") Date dateTo, @Param("userid") Integer userId);
 
-    @Query(value = "CALL sp_getDestinationRankByUser(:userid);", nativeQuery = true)
-    List<MobileReportUserCallsRank> getDestinationRankByUser(@Param("userid") Integer userId);
+    @Query(value = "CALL sp_getDestinationRankByUser(:userid,:top);", nativeQuery = true)
+    List<MobileReportUserCallsRank> getDestinationRankByUser(@Param("userid") Integer userId, @Param("top") Integer top);
 
 
 }

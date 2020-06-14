@@ -1,9 +1,11 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLineType;
 import com.utn.TPFinal.repositories.IPhoneLineTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -47,12 +49,12 @@ public class PhoneLineTypeService {
         }
     }
 
-    public void update(PhoneLineType phoneLineType) throws Exception {
+    public void update(PhoneLineType phoneLineType) throws ValidationException, Exception {
         try {
             if (phoneLineTypeRepository.existsById(phoneLineType.getId())) {
                 phoneLineTypeRepository.save(phoneLineType);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

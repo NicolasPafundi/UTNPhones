@@ -1,9 +1,8 @@
 package com.utn.TPFinal.controllers;
 
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.CityService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +56,11 @@ public class CityController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception, ValidationException {
         try{
             cityService.update(city);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

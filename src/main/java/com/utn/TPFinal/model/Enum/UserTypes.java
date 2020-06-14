@@ -1,6 +1,6 @@
 package com.utn.TPFinal.model.Enum;
 
-public enum UserTypeEnum {
+public enum UserTypes {
     CLIENT,
     EMPLOYEE,
     INFRASTRUCTURE

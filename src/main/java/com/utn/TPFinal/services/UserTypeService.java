@@ -1,9 +1,11 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.repositories.IUserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -47,12 +49,12 @@ public class UserTypeService {
         }
     }
 
-    public void update(UserType userType) throws Exception {
+    public void update(UserType userType) throws ValidationException, Exception {
         try {
             if (userTypeRepository.existsById(userType.getId())) {
                 userTypeRepository.save(userType);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

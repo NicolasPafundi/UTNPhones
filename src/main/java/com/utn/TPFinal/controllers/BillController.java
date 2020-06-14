@@ -1,9 +1,7 @@
 package com.utn.TPFinal.controllers;
 
 import com.utn.TPFinal.exceptions.UserNotexistException;
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
 import com.utn.TPFinal.model.entities.Bill;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.BillService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class BillController {
         }
     }
 
-    @GetMapping("/Client/CurrentUser")
+    @GetMapping("/Client/me")
     public ResponseEntity<List<Bill>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws UserNotexistException {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();

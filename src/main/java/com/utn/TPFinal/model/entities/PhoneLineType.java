@@ -1,6 +1,7 @@
 package com.utn.TPFinal.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.utn.TPFinal.model.Enum.PhoneLineTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,9 @@ public class PhoneLineType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
+	@Enumerated(EnumType.STRING)
 	@Column(name="name")
-	private String name;
+	private PhoneLineTypes name;
 
 	@OneToMany(mappedBy = "phoneLineType")
 	@JsonBackReference(value="phoneLineType-phoneLine")

@@ -1,12 +1,14 @@
 package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.repositories.IBillRepository;
 import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -59,12 +61,12 @@ public class BillService {
         }
     }
 
-    public void update(Bill bill) throws Exception {
+    public void update(Bill bill) throws ValidationException, Exception {
         try {
             if (billRepository.existsById(bill.getId())) {
                 billRepository.save(bill);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

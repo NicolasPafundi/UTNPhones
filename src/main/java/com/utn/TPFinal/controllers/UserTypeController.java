@@ -1,7 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
-import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.services.UserTypeService;
 import com.utn.TPFinal.session.SessionManager;
@@ -55,11 +54,11 @@ public class UserTypeController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws Exception, ValidationException {
         try{
             userTypeService.update(userType);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

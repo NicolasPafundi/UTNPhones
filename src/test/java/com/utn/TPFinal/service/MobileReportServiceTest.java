@@ -57,11 +57,10 @@ public class MobileReportServiceTest {
         MobileReportFilter mobileReportFilter = new MobileReportFilter();
         mobileReportFilter.setDateFrom(new Date(0,0,0));
         mobileReportFilter.setDateTo(new Date(0,0,0));
-        mobileReportFilter.setUserId(1);
 
         when(userRepository.findById(1)).thenReturn(java.util.Optional.of(user));
         when(mobileReportRepository.getCallsByUserByDate(new Date(0,0,0),new Date(0,0,0),1)).thenReturn(mobileReportUserCallsList);
-        List<MobileReportUserCalls> returnedMobileReportUserCallsList= service.getCallsByUserByDate(mobileReportFilter);
+        List<MobileReportUserCalls> returnedMobileReportUserCallsList= service.getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1);
 
         assertEquals(returnedMobileReportUserCallsList.size(), 1);
         assertEquals(returnedMobileReportUserCallsList.get(0), mobileReportUserCallsList.get(0));

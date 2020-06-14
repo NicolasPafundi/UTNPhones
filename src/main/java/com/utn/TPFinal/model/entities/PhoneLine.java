@@ -20,6 +20,8 @@ public class PhoneLine {
 	private Integer id;
 	@Column(name="numberline")
 	private Integer numberLine;
+	@Column(name="active")
+	private Boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")

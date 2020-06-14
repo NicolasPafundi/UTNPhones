@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.UserService;
 import com.utn.TPFinal.session.SessionManager;
@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/Client/CurrentUser")
+    @GetMapping("/Client/me")
     public ResponseEntity<User> getByCurrentUser(@RequestHeader("Authorization") String sessionToken){
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
@@ -66,26 +66,26 @@ public class UserController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser) throws ValidationException, Exception {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.add(newUser));
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException {
         try{
             userService.update(userUpdate);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }
 
-    @PutMapping("/Client/CurrentUser")
-    public ResponseEntity updateCurrentUser(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception {
+    @PutMapping("/Client/me")
+    public ResponseEntity updateCurrentUser(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             if(userUpdate.getId() == userId){
@@ -93,7 +93,7 @@ public class UserController {
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }
@@ -108,7 +108,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/Client/CurrentUser")
+    @DeleteMapping("/Client/me")
     public ResponseEntity removeCurrentUser(@RequestHeader("Authorization") String sessionToken){
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();

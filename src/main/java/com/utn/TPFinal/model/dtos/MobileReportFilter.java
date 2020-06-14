@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class MobileReportFilter {
-    private Integer userId;
     private Date dateFrom;
     private Date dateTo;
 }

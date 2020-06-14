@@ -1,10 +1,9 @@
 package com.utn.TPFinal.controllers;
 
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.dtos.CallInput;
 import com.utn.TPFinal.model.dtos.CallsReportFilter;
-import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.*;
 import com.utn.TPFinal.model.projections.InfraResponse;
 import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
@@ -73,7 +72,7 @@ public class CallController {
         }
     }
 
-    @GetMapping("/Client/CurrentUser")
+    @GetMapping("/Client/me")
     public ResponseEntity<List<Call>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourseNoExistExeption{
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
@@ -94,11 +93,11 @@ public class CallController {
     }
 
     @PutMapping("/Infrastructure/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call) throws Exception, ValidationException {
         try{
             callService.update(call);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }

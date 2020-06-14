@@ -4,20 +4,17 @@ package com.utn.TPFinal.services;
 import com.sun.istack.Nullable;
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
 import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.dtos.CallInput;
 import com.utn.TPFinal.model.dtos.CallsReportFilter;
 import com.utn.TPFinal.model.entities.Call;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.InfraResponse;
-import com.utn.TPFinal.model.projections.MobileReportUserCallsRank;
 import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import com.utn.TPFinal.repositories.ICallRepository;
 import com.utn.TPFinal.repositories.IUserRepository;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,12 +57,12 @@ public class CallService {
 
     }
 
-    public void update(Call call) throws Exception {
+    public void update(Call call) throws ValidationException, Exception {
         try {
             if (callRepository.existsById(call.getId())) {
                 callRepository.save(call);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

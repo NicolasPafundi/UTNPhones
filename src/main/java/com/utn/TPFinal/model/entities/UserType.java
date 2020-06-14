@@ -1,6 +1,7 @@
 package com.utn.TPFinal.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.utn.TPFinal.model.Enum.UserTypes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,9 @@ public class UserType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
+	@Enumerated(EnumType.STRING)
 	@Column(name="name")
-	private String name;
+	private UserTypes name;
 
 	@OneToMany(mappedBy = "userType")
 	@JsonBackReference(value="userType-user")

@@ -2,6 +2,7 @@ package com.utn.TPFinal.controller;
 
 import com.utn.TPFinal.controllers.MobileReportController;
 import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.entities.UserType;
@@ -36,7 +37,7 @@ public class MobileReportControllerTest {
     @Test
     public void TestGetBillsByUserByDateOk() throws UserNotexistException {
         UserType userType = new UserType();
-        userType.setName("EMPLEADO");
+        userType.setName(UserTypes.EMPLOYEE);
         User user = new User();
         user.setId(1);
         user.setFirstName("name");
@@ -58,16 +59,15 @@ public class MobileReportControllerTest {
         MobileReportFilter mobileReportFilter = new MobileReportFilter();
         mobileReportFilter.setDateFrom(new Date(0,0,0));
         mobileReportFilter.setDateTo(new Date(0,0,0));
-        mobileReportFilter.setUserId(1);
 
         when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
-        when(service.getCallsByUserByDate(mobileReportFilter)).thenReturn(mobileReportUserCallsList);
+        when(service.getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1)).thenReturn(mobileReportUserCallsList);
         ResponseEntity<List<MobileReportUserCalls>> returnedMobileReportUserCallsList= controller.getCallsByUserByDate("1",mobileReportFilter);
 
         assertEquals(returnedMobileReportUserCallsList.getBody().size(), 1);
         assertEquals(returnedMobileReportUserCallsList.getBody().get(0), mobileReportUserCallsList.get(0));
 
         verify(sessionManagerService, times(1)).getCurrentUser("1");
-        verify(service, times(1)).getCallsByUserByDate(mobileReportFilter);
+        verify(service, times(1)).getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1);
     }
 }

@@ -11,6 +11,7 @@ import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,24 +26,22 @@ public class MobileReportService {
         this.userRepository = userRepository;
     }
 
-    public List<MobileReportUserCalls> getCallsByUserByDate(MobileReportFilter mobileReportFilter) throws UserNotexistException
-    {
-        User user = userRepository.findById(mobileReportFilter.getUserId()).orElseThrow(()->new UserNotexistException());
-        return mobileReportRepository.getCallsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
-    }
-
-    public List<MobileReportUserBills> getBillsByUserByDate(MobileReportFilter mobileReportFilter) throws  UserNotexistException
-    {
-        Integer ui = mobileReportFilter.getUserId();
-        User user = userRepository.findById(ui).orElseThrow(()->new UserNotexistException());
-        return mobileReportRepository.getBillsByUserByDate(mobileReportFilter.getDateFrom(), mobileReportFilter.getDateTo(), mobileReportFilter.getUserId());
-
-    }
-
-    public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId) throws UserNotexistException
+    public List<MobileReportUserCalls> getCallsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws UserNotexistException
     {
         User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
-        return mobileReportRepository.getDestinationRankByUser(userId);
+        return mobileReportRepository.getCallsByUserByDate(dateFrom, dateTo, userId);
+    }
+
+    public List<MobileReportUserBills> getBillsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws  UserNotexistException
+    {
+        User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
+        return mobileReportRepository.getBillsByUserByDate(dateFrom, dateTo, userId);
+    }
+
+    public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId, Integer top) throws UserNotexistException
+    {
+        User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
+        return mobileReportRepository.getDestinationRankByUser(userId,top);
 
     }
 

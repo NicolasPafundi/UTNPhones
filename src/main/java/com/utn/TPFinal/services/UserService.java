@@ -1,5 +1,6 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.dtos.LoginInput;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.exceptions.UserNotexistException;
@@ -7,6 +8,7 @@ import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +54,13 @@ public class UserService {
         }
     }
 
-    public int add(User user){
+    public int add(User user) throws ValidationException, Exception {
         try{
-            return userRepository.save(user).getId();
+            if(user.getUserType().getName().equals(UserTypes.CLIENT) || user.getUserType().getName().equals(UserTypes.EMPLOYEE)|| user.getUserType().getName().equals(UserTypes.INFRASTRUCTURE)){
+                return userRepository.save(user).getId();
+            }else{
+                throw new ValidationException("Invalid Type Name");
+            }
         }catch(Exception ex){
             throw ex;
         }
@@ -68,12 +74,16 @@ public class UserService {
         }
     }
 
-    public void update(User user) throws Exception {
+    public void update(User user) throws ValidationException, Exception {
         try {
             if (userRepository.existsById(user.getId())) {
-                userRepository.save(user);
+                if(user.getUserType().getName().equals(UserTypes.CLIENT) || user.getUserType().getName().equals(UserTypes.EMPLOYEE)|| user.getUserType().getName().equals(UserTypes.INFRASTRUCTURE)){
+                    userRepository.save(user);
+                }else{
+                    throw new ValidationException("Invalid Type Name");
+                }
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

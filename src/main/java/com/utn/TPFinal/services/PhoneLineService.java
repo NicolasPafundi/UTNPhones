@@ -1,9 +1,12 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ValidationException;
+import com.utn.TPFinal.model.Enum.PhoneLineTypes;
 import com.utn.TPFinal.model.entities.PhoneLine;
 import com.utn.TPFinal.repositories.IPhoneLineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -39,9 +42,13 @@ public class PhoneLineService {
         }
     }
 
-    public int add(PhoneLine phoneLine){
+    public int add(PhoneLine phoneLine) throws Exception, ValidationException {
         try{
-            return phoneLineRepository.save(phoneLine).getId();
+            if(phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.LANDLINE) || phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.MOVIL)){
+                return phoneLineRepository.save(phoneLine).getId();
+            }else{
+                throw new ValidationException("Invalid Type Name");
+            }
         }catch(Exception ex){
             throw ex;
         }
@@ -55,12 +62,16 @@ public class PhoneLineService {
         }
     }
 
-    public void update(PhoneLine phoneLine) throws Exception {
+    public void update(PhoneLine phoneLine) throws ValidationException, Exception {
         try {
             if (phoneLineRepository.existsById(phoneLine.getId())) {
-                phoneLineRepository.save(phoneLine);
+                if(phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.LANDLINE) || phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.MOVIL)){
+                    phoneLineRepository.save(phoneLine);
+                }else{
+                    throw new ValidationException("Invalid Type Name");
+                }
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

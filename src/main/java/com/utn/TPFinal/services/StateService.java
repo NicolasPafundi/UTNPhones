@@ -4,6 +4,8 @@ import com.utn.TPFinal.model.entities.State;
 import com.utn.TPFinal.repositories.IStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.utn.TPFinal.exceptions.ValidationException;
+
 import java.util.List;
 
 @Service
@@ -47,12 +49,12 @@ public class StateService {
         }
     }
 
-    public void update(State state) throws Exception {
+    public void update(State state) throws ValidationException, Exception {
         try {
             if (stateRepository.existsById(state.getId())) {
                 stateRepository.save(state);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

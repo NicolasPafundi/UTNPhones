@@ -1,6 +1,7 @@
 package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
 import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.model.projections.RatesReport;
@@ -10,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
-
-import static jdk.internal.dynalink.support.Guards.isNotNull;
-import static jdk.internal.dynalink.support.Guards.isNull;
 
 @Service
 public class RateService {
@@ -57,12 +55,12 @@ public class RateService {
         }
     }
 
-    public void update(Rate rate) throws Exception {
+    public void update(Rate rate) throws ValidationException, Exception {
         try {
             if (rateRepository.existsById(rate.getId())) {
                 rateRepository.save(rate);
             } else {
-                throw new Exception("Invalid Id");
+                throw new ValidationException("Invalid Id");
             }
         }catch(Exception ex){
             throw ex;

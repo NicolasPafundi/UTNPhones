@@ -1,8 +1,7 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.model.Enum.UserTypeEnum;
+import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLine;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.PhoneLineService;
 import com.utn.TPFinal.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class PhoneLineController {
         }
     }
 
-    @GetMapping("/Client/CurrentUser")
+    @GetMapping("/Client/me")
     public ResponseEntity<List<PhoneLine>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken){
         try{
             Integer userId= sessionManager.getCurrentUser(sessionToken).getId();
@@ -66,20 +65,20 @@ public class PhoneLineController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(phoneLineService.add(phoneLine));
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException {
         try{
             phoneLineService.update(phoneLine);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (Exception | ValidationException ex){
             throw ex;
         }
     }
