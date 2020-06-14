@@ -1,6 +1,8 @@
 ALTER TABLE phonelines CHANGE `number` numberline int(11) NOT NULL;
 ALTER TABLE users ADD password varchar(10) NOT NULL;
 ALTER TABLE phonelines ADD active BIT DEFAULT 1 NOT NULL;
+ALTER TABLE bills ADD paid BIT DEFAULT 0 NOT NULL;
+ALTER TABLE bills CHANGE paid paid BIT DEFAULT 0 NOT NULL AFTER price_final;
 
 INSERT INTO STATES (name)
 Values

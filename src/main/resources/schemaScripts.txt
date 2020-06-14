@@ -96,7 +96,11 @@ select
 	b2.price_cost as "Cost Price",
 	b2.price_final as "Total Price",
 	b2.createdon as "Creation Day",
-	b2.payday as "Pay Day"
+	b2.payday as "Pay Day",
+	CASE
+        WHEN b2.paid = 0 THEN "No"
+        WHEN b2.paid = 1 THEN "Si"
+    end as "Paid"
 	from bills b2
 	where b2.user_id = userid and createdon between datefrom and dateto+1;
 end$$
