@@ -24,7 +24,7 @@ public class PhoneLineTypeController {
     }
 
 
-    @GetMapping("/Client/")
+    @GetMapping("/Employee/")
     public ResponseEntity<List<PhoneLineType>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
             List<PhoneLineType> phoneLineTypes = phoneLineTypeService.getAll();

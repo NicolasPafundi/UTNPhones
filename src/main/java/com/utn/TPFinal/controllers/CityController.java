@@ -26,7 +26,7 @@ public class CityController {
         this.sessionManager = sessionManager;
     }
 
-    @GetMapping("/Client/State/{id}")
+    @GetMapping("/Employee/State/{id}")
     public ResponseEntity<List<City>> getAllByState(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
         try{
             List<City> cities = cityService.getAllByState(id);

@@ -24,7 +24,7 @@ public class StateController {
     }
 
 
-    @GetMapping("/Client")
+    @GetMapping("/Employee")
     public ResponseEntity<List<State>> getAll(@RequestHeader("Authorization") String sessionToken){
         try{
             List<State> states = stateService.getAll();
