@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.services.BillService;
 import com.utn.TPFinal.session.SessionManager;
@@ -25,7 +25,7 @@ public class BillController {
     }
 
     @GetMapping("/Employee/User/{id}")
-    public ResponseEntity<List<Bill>> getByUserID(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws UserNotexistException {
+    public ResponseEntity<List<Bill>> getByUserID(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             List<Bill> bills = billService.getByUserID(id);
             return (bills.size() > 0) ? ResponseEntity.ok(bills) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -35,7 +35,7 @@ public class BillController {
     }
 
     @GetMapping("/Client/me")
-    public ResponseEntity<List<Bill>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws UserNotexistException {
+    public ResponseEntity<List<Bill>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<Bill> bills = billService.getByUserID(userId);

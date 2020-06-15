@@ -1,7 +1,6 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.exceptions.UserNotexistException;
-import com.utn.TPFinal.model.dtos.MobileReportFilter;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.MobileReportUserBills;
 import com.utn.TPFinal.model.projections.MobileReportUserCalls;
@@ -26,21 +25,21 @@ public class MobileReportService {
         this.userRepository = userRepository;
     }
 
-    public List<MobileReportUserCalls> getCallsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws UserNotexistException
+    public List<MobileReportUserCalls> getCallsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws ResourceNotExistException
     {
-        User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
+        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
         return mobileReportRepository.getCallsByUserByDate(dateFrom, dateTo, userId);
     }
 
-    public List<MobileReportUserBills> getBillsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws  UserNotexistException
+    public List<MobileReportUserBills> getBillsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws  ResourceNotExistException
     {
-        User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
+        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
         return mobileReportRepository.getBillsByUserByDate(dateFrom, dateTo, userId);
     }
 
-    public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId, Integer top) throws UserNotexistException
+    public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId, Integer top) throws ResourceNotExistException
     {
-        User user = userRepository.findById(userId).orElseThrow(()->new UserNotexistException());
+        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
         return mobileReportRepository.getDestinationRankByUser(userId,top);
 
     }

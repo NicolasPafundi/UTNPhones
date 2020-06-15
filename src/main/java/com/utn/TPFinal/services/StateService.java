@@ -1,5 +1,7 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.entities.State;
 import com.utn.TPFinal.repositories.IStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,37 +27,36 @@ public class StateService {
         }
     }
 
-    public State getById(Integer Id){
+    public State getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
-            return stateRepository.findById(Id).get();
+            return stateRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("State"));
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public int add(State state){
+    public int add(State state) throws ResourceAlreadyExistExeption, Exception {
         try{
+            if(stateRepository.existsById(state.getId())){throw new ResourceAlreadyExistExeption("State");}
             return stateRepository.save(state).getId();
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void remove(Integer Id){
+    public void remove(Integer Id) throws ResourceNotExistException, Exception {
         try{
+            stateRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("State"));
             stateRepository.deleteById(Id);
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void update(State state) throws ValidationException, Exception {
+    public void update(State state) throws Exception, ResourceNotExistException {
         try {
-            if (stateRepository.existsById(state.getId())) {
-                stateRepository.save(state);
-            } else {
-                throw new ValidationException("Invalid Id");
-            }
+            stateRepository.findById(state.getId()).orElseThrow(()->new ResourceNotExistException("State"));
+            stateRepository.save(state);
         }catch(Exception ex){
             throw ex;
         }

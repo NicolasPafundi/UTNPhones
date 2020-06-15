@@ -1,6 +1,6 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.projections.MobileReportUserBills;
 import com.utn.TPFinal.model.projections.MobileReportUserCalls;
@@ -28,7 +28,7 @@ public class MobileReportController {
     }
 
     @PostMapping("/Client/callByDate")
-    public ResponseEntity<List<MobileReportUserCalls>> getCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
+    public ResponseEntity<List<MobileReportUserCalls>> getCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody MobileReportFilter mobileReportFilter) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<MobileReportUserCalls> mobileReportUserCalls = mobileReportService.getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),userId);
@@ -39,7 +39,7 @@ public class MobileReportController {
     }
 
     @PostMapping("/Client/billsByDate")
-    public ResponseEntity<List<MobileReportUserBills>> getBillsByUserByDate(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter) throws UserNotexistException{
+    public ResponseEntity<List<MobileReportUserBills>> getBillsByUserByDate(@RequestHeader("Authorization") String sessionToken,@RequestBody MobileReportFilter mobileReportFilter) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<MobileReportUserBills> mobileReportUserBills = mobileReportService.getBillsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),userId);
@@ -50,7 +50,7 @@ public class MobileReportController {
     }
 
     @GetMapping("/Client/destinationRank")
-    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken, Integer top) throws UserNotexistException {
+    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken, Integer top) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(userId,top);

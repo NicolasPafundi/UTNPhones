@@ -1,9 +1,7 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.*;
 import com.utn.TPFinal.model.dtos.ErrorResponseDto;
-import com.utn.TPFinal.exceptions.InvalidLoginException;
-import com.utn.TPFinal.exceptions.UserNotexistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,19 +14,25 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidLoginException.class)
     public ErrorResponseDto handleLoginException(InvalidLoginException exc) {
-        return new ErrorResponseDto(1, "Invalid login");
+        return new ErrorResponseDto(401, exc.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public ErrorResponseDto handleValidationException(ValidationException exc) {
-        return new ErrorResponseDto(2, exc.getMessage());
+        return new ErrorResponseDto(400, exc.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UserNotexistException.class)
-    public ErrorResponseDto handleUserNotExists() {
-        return new ErrorResponseDto(3, "User not exists");
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotExistException.class)
+    public ErrorResponseDto handleResourceNoExist(ResourceNotExistException exc) {
+        return new ErrorResponseDto(404, exc.getMessage() + " doesn't exists");
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ResourceAlreadyExistExeption.class)
+    public ErrorResponseDto handleResourceAlreadyExist(ResourceAlreadyExistExeption exc) {
+        return new ErrorResponseDto(409, exc.getMessage() + " already exists");
     }
 
 

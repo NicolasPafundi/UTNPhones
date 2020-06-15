@@ -1,6 +1,7 @@
 package com.utn.TPFinal.services;
 
-import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.model.entities.User;
@@ -31,43 +32,42 @@ public class BillService {
         }
     }
 
-    public List<Bill> getByUserID(Integer id) throws UserNotexistException {
+    public List<Bill> getByUserID(Integer id) throws ResourceNotExistException {
 
-        User user = userRepository.findById(id).orElseThrow(()->new UserNotexistException());
+        User user = userRepository.findById(id).orElseThrow(()->new ResourceNotExistException("User"));
         return billRepository.findByUserId(id);
     }
 
-    public Bill getById(Integer Id){
+    public Bill getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
-            return billRepository.findById(Id).get();
+            return billRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Bill"));
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public int add(Bill bill){
+    public int add(Bill bill) throws Exception, ResourceAlreadyExistExeption {
         try{
+            if(billRepository.existsById(bill.getId())){throw new ResourceAlreadyExistExeption("Bill");}
             return billRepository.save(bill).getId();
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void remove(Integer Id){
+    public void remove(Integer Id) throws ResourceNotExistException, Exception {
         try{
+            billRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Bill"));
             billRepository.deleteById(Id);
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void update(Bill bill) throws ValidationException, Exception {
+    public void update(Bill bill) throws Exception, ResourceNotExistException {
         try {
-            if (billRepository.existsById(bill.getId())) {
-                billRepository.save(bill);
-            } else {
-                throw new ValidationException("Invalid Id");
-            }
+            billRepository.findById(bill.getId()).orElseThrow(()->new ResourceNotExistException("Bill"));
+            billRepository.save(bill);
         }catch(Exception ex){
             throw ex;
         }

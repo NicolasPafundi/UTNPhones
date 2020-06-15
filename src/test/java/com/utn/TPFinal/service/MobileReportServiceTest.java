@@ -1,6 +1,6 @@
 package com.utn.TPFinal.service;
 
-import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.MobileReportUserCalls;
@@ -36,7 +36,7 @@ public class MobileReportServiceTest {
     }
 
     @Test
-    public void TestGetBillsByUserByDateOk() throws UserNotexistException {
+    public void TestGetBillsByUserByDateOk() throws ResourceNotExistException, ResourceNotExistException {
         User user = new User();
         user.setId(1);
         user.setFirstName("name");
@@ -70,8 +70,8 @@ public class MobileReportServiceTest {
     }
 
     /*
-    @Test(expected = UserNotexistException.class)
-    public void TestGetBillsByUserByDateUserNotExist() throws UserNotexistException {
+    @Test(expected = ResourceNotExistException.class)
+    public void TestGetBillsByUserByDateUserNotExist() throws ResourceNotExistException {
         MobileReportFilter mobileReportFilter = new MobileReportFilter();
         mobileReportFilter.setDateFrom(new Date(0,0,0));
         mobileReportFilter.setDateTo(new Date(0,0,0));

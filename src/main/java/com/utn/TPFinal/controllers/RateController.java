@@ -1,6 +1,7 @@
 package com.utn.TPFinal.controllers;
 
-import com.utn.TPFinal.exceptions.ResourseNoExistExeption;
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.model.projections.RatesReport;
@@ -38,7 +39,7 @@ public class RateController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<Rate> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<Rate> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             Rate rate = rateService.getById(id);
             return (rate != null) ? ResponseEntity.ok(rate) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -48,7 +49,7 @@ public class RateController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws ResourceAlreadyExistExeption, Exception {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(rateService.add(rate));
         }catch (Exception ex){
@@ -57,17 +58,17 @@ public class RateController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws Exception, ValidationException, ResourceNotExistException {
         try{
             rateService.update(rate);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             rateService.remove(id);
             return ResponseEntity.ok().build();
@@ -77,7 +78,7 @@ public class RateController {
     }
 
     @GetMapping("/Employee/ratesBetweenAreaCodes/{areaCodeFrom}/{areaCodeTo}")
-    public ResponseEntity<List<RatesReport>> getRatesBetweenAreaCodes(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer areaCodeFrom, @PathVariable Integer areaCodeTo) throws ResourseNoExistExeption {
+    public ResponseEntity<List<RatesReport>> getRatesBetweenAreaCodes(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer areaCodeFrom, @PathVariable Integer areaCodeTo) throws ResourceNotExistException, Exception {
         try{
             if(areaCodeTo == 0) {
                 areaCodeTo = null;
@@ -86,7 +87,7 @@ public class RateController {
             return (report.size() > 0)? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
         }catch (Exception ex){
-            throw new ResourseNoExistExeption();
+            throw ex;
         }
     }
 

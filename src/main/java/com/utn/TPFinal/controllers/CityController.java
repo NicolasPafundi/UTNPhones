@@ -1,6 +1,8 @@
 package com.utn.TPFinal.controllers;
 
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
 import com.utn.TPFinal.services.CityService;
@@ -27,7 +29,7 @@ public class CityController {
     }
 
     @GetMapping("/Employee/State/{id}")
-    public ResponseEntity<List<City>> getAllByState(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+    public ResponseEntity<List<City>> getAllByState(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             List<City> cities = cityService.getAllByState(id);
             return (cities.size() > 0) ? ResponseEntity.ok(cities) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -37,7 +39,7 @@ public class CityController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<City> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<City> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws Exception, ResourceNotExistException {
         try{
             City city = cityService.getById(id);
             return (city != null) ? ResponseEntity.ok(city) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -47,7 +49,7 @@ public class CityController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody City city){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws ResourceAlreadyExistExeption, Exception {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(cityService.add(city));
         }catch (Exception ex){
@@ -56,17 +58,17 @@ public class CityController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception, ResourceNotExistException {
         try{
             cityService.update(city);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             cityService.remove(id);
             return ResponseEntity.ok().build();

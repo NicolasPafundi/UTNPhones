@@ -1,7 +1,7 @@
 package com.utn.TPFinal.controller;
 
 import com.utn.TPFinal.controllers.MobileReportController;
-import com.utn.TPFinal.exceptions.UserNotexistException;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
 import com.utn.TPFinal.model.entities.User;
@@ -35,7 +35,7 @@ public class MobileReportControllerTest {
     }
 
     @Test
-    public void TestGetBillsByUserByDateOk() throws UserNotexistException {
+    public void TestGetBillsByUserByDateOk() throws ResourceNotExistException, Exception {
         UserType userType = new UserType();
         userType.setName(UserTypes.EMPLOYEE);
         User user = new User();

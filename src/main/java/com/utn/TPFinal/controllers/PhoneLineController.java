@@ -1,5 +1,7 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLine;
 import com.utn.TPFinal.services.PhoneLineService;
@@ -34,7 +36,7 @@ public class PhoneLineController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<PhoneLine> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<PhoneLine> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             PhoneLine phoneLine = phoneLineService.getById(id);
             return (phoneLine != null) ? ResponseEntity.ok(phoneLine) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -44,7 +46,7 @@ public class PhoneLineController {
     }
 
     @GetMapping("/Employee/User/{id}")
-    public ResponseEntity<List<PhoneLine>> getByUserId(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+    public ResponseEntity<List<PhoneLine>> getByUserId(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             List<PhoneLine> phoneLines = phoneLineService.getByUser(id);
             return (phoneLines.size() > 0) ? ResponseEntity.ok(phoneLines) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -54,7 +56,7 @@ public class PhoneLineController {
     }
 
     @GetMapping("/Client/me")
-    public ResponseEntity<List<PhoneLine>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity<List<PhoneLine>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws Exception, ResourceNotExistException {
         try{
             Integer userId= sessionManager.getCurrentUser(sessionToken).getId();
             List<PhoneLine> phoneLines = phoneLineService.getByUser(userId);
@@ -65,7 +67,7 @@ public class PhoneLineController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException {
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException, ResourceAlreadyExistExeption {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(phoneLineService.add(phoneLine));
         }catch (Exception | ValidationException ex){
@@ -74,7 +76,7 @@ public class PhoneLineController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException, ResourceNotExistException {
         try{
             phoneLineService.update(phoneLine);
             return ResponseEntity.ok().build();
@@ -84,7 +86,7 @@ public class PhoneLineController {
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             phoneLineService.remove(id);
             return ResponseEntity.ok().build();

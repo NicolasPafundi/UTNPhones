@@ -1,5 +1,7 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.services.UserTypeService;
@@ -35,7 +37,7 @@ public class UserTypeController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<UserType> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<UserType> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             UserType userType = userTypeService.getById(id);
             return (userType != null) ? ResponseEntity.ok(userType) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -45,7 +47,7 @@ public class UserTypeController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws ResourceAlreadyExistExeption, Exception {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userTypeService.add(userType));
         }catch (Exception ex){
@@ -54,17 +56,17 @@ public class UserTypeController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody UserType userType) throws Exception, ValidationException, ResourceNotExistException {
         try{
             userTypeService.update(userType);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             userTypeService.remove(id);
             return ResponseEntity.ok().build();

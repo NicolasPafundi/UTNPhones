@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ICityRepository extends JpaRepository<City, Integer> {
-    @Query(value = "SELECT * FROM states WHERE state_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM cities WHERE state_id = ?1", nativeQuery = true)
     List<City> getAllByState(Integer stateId);
 
     City findByAreaCode(Integer areaCodeFrom);

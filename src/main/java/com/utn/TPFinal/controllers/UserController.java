@@ -1,5 +1,7 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.services.UserService;
@@ -35,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/Employee/UserType/{id}")
-    public ResponseEntity<List<User>> getAllByUserType(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id){
+    public ResponseEntity<List<User>> getAllByUserType(@RequestHeader("Authorization") String sessionToken, @PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             List<User> users = userService.getAllByUserType(id);
             return (users.size() > 0) ? ResponseEntity.ok(users) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -45,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<User> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<User> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             User userResult = userService.getById(id);
             return (userResult != null) ? ResponseEntity.ok(userResult) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -55,7 +57,7 @@ public class UserController {
     }
 
     @GetMapping("/Client/me")
-    public ResponseEntity<User> getByCurrentUser(@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity<User> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             User userResult = userService.getById(userId);
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser) throws ValidationException, Exception {
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser) throws ValidationException, Exception, ResourceAlreadyExistExeption {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.add(newUser));
         }catch (Exception | ValidationException ex){
@@ -75,7 +77,7 @@ public class UserController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException, ResourceNotExistException {
         try{
             userService.update(userUpdate);
             return ResponseEntity.ok().build();
@@ -85,7 +87,7 @@ public class UserController {
     }
 
     @PutMapping("/Client/me")
-    public ResponseEntity updateCurrentUser(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException {
+    public ResponseEntity updateCurrentUser(@RequestHeader("Authorization") String sessionToken,@RequestBody User userUpdate) throws Exception, ValidationException, ResourceNotExistException {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             if(userUpdate.getId() == userId){
@@ -99,7 +101,7 @@ public class UserController {
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             userService.remove(id);
             return ResponseEntity.ok().build();
@@ -109,7 +111,7 @@ public class UserController {
     }
 
     @DeleteMapping("/Client/me")
-    public ResponseEntity removeCurrentUser(@RequestHeader("Authorization") String sessionToken){
+    public ResponseEntity removeCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             userService.remove(userId);

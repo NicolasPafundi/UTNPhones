@@ -1,5 +1,7 @@
 package com.utn.TPFinal.controllers;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLineType;
 import com.utn.TPFinal.services.PhoneLineTypeService;
@@ -35,7 +37,7 @@ public class PhoneLineTypeController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<PhoneLineType> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity<PhoneLineType> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             PhoneLineType phoneLineType = phoneLineTypeService.getById(id);
             return (phoneLineType != null) ? ResponseEntity.ok(phoneLineType) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -45,7 +47,7 @@ public class PhoneLineTypeController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType){
+    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType) throws ResourceAlreadyExistExeption, Exception {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(phoneLineTypeService.add(phoneLineType));
         }catch (Exception ex){
@@ -54,17 +56,17 @@ public class PhoneLineTypeController {
     }
 
     @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType) throws Exception, ValidationException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLineType phoneLineType) throws Exception, ResourceNotExistException {
         try{
             phoneLineTypeService.update(phoneLineType);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (Exception ex){
             throw ex;
         }
     }
 
     @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id){
+    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
         try{
             phoneLineTypeService.remove(id);
             return ResponseEntity.ok().build();

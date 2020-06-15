@@ -1,5 +1,7 @@
 package com.utn.TPFinal.services;
 
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
+import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.repositories.IUserTypeRepository;
@@ -25,37 +27,36 @@ public class UserTypeService {
         }
     }
 
-    public UserType getById(Integer Id){
+    public UserType getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
-            return userTypeRepository.findById(Id).get();
+            return userTypeRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("UserType"));
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public int add(UserType userType){
+    public int add(UserType userType) throws ResourceAlreadyExistExeption, Exception {
         try{
+            if(userTypeRepository.existsById(userType.getId())){throw new ResourceAlreadyExistExeption("UserType");}
             return userTypeRepository.save(userType).getId();
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void remove(Integer Id){
+    public void remove(Integer Id) throws ResourceNotExistException, Exception {
         try{
+            userTypeRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("UserType"));
             userTypeRepository.deleteById(Id);
         }catch(Exception ex){
             throw ex;
         }
     }
 
-    public void update(UserType userType) throws ValidationException, Exception {
+    public void update(UserType userType) throws Exception, ResourceNotExistException {
         try {
-            if (userTypeRepository.existsById(userType.getId())) {
-                userTypeRepository.save(userType);
-            } else {
-                throw new ValidationException("Invalid Id");
-            }
+            userTypeRepository.findById(userType.getId()).orElseThrow(()->new ResourceNotExistException("UserType"));
+            userTypeRepository.save(userType);
         }catch(Exception ex){
             throw ex;
         }
