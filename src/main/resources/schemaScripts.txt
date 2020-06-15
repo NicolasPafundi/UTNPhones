@@ -190,7 +190,8 @@ DELIMITER ;
 
 
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CallsByUser`(userid int )
+DELIMITER $$
+CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_CallsByUser`(userid int )
 begin
 	select
 		c2.*
@@ -198,7 +199,8 @@ begin
 	inner join phonelines p2 on c2.lineid_from = p2.id
 	inner join users u2 on p2.user_id = u2.id
 	where u2.id = userid;
-end
+end$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_reportCallsByUserByDate`(userid int,datefrom date,dateto date )
