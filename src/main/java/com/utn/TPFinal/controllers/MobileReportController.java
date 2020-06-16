@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequestMapping("/api/MobileReport")
 public class MobileReportController {
@@ -49,8 +51,8 @@ public class MobileReportController {
         }
     }
 
-    @GetMapping("/Client/destinationRank")
-    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken, Integer top) throws ResourceNotExistException, Exception {
+    @GetMapping("/Client/destinationRank/{top?}")
+    public ResponseEntity<List<MobileReportUserCallsRank>> getDestinationRankByUser(@RequestHeader("Authorization") String sessionToken,@RequestParam(value= "top",required = false, defaultValue = "10") Integer top) throws ResourceNotExistException, Exception {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<MobileReportUserCallsRank> mobileReportUserCallsRank = mobileReportService.getDestinationRankByUser(userId,top);
