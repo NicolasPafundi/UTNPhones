@@ -2,7 +2,6 @@ package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.Bill;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.repositories.IBillRepository;
@@ -48,7 +47,7 @@ public class BillService {
 
     public int add(Bill bill) throws Exception, ResourceAlreadyExistExeption {
         try{
-            if(billRepository.existsById(bill.getId())){throw new ResourceAlreadyExistExeption("Bill");}
+            if(bill.getId()!=null && billRepository.existsById(bill.getId())){throw new ResourceAlreadyExistExeption("Bill");}
             return billRepository.save(bill).getId();
         }catch(Exception ex){
             throw ex;

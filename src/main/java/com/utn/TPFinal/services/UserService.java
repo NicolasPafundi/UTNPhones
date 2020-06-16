@@ -62,7 +62,7 @@ public class UserService {
 
     public int add(User user) throws ValidationException, Exception, ResourceAlreadyExistExeption {
         try{
-            if(userRepository.existsById(user.getId())){throw new ResourceAlreadyExistExeption("User");}
+            if(user.getId()!=null && userRepository.existsById(user.getId())){throw new ResourceAlreadyExistExeption("User");}
             if(user.getUserType().getName().equals(UserTypes.CLIENT) || user.getUserType().getName().equals(UserTypes.EMPLOYEE)|| user.getUserType().getName().equals(UserTypes.INFRASTRUCTURE)){
                 return userRepository.save(user).getId();
             }else{

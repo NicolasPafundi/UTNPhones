@@ -2,7 +2,6 @@ package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
 import com.utn.TPFinal.repositories.ICityRepository;
 import com.utn.TPFinal.repositories.IStateRepository;
@@ -41,7 +40,7 @@ public class CityService {
 
     public int add(City city) throws ResourceAlreadyExistExeption, Exception {
         try{
-            if(cityRepository.existsById(city.getId())){throw new ResourceAlreadyExistExeption("City");}
+            if(city.getId()!=null && cityRepository.existsById(city.getId())){throw new ResourceAlreadyExistExeption("City");}
             return cityRepository.save(city).getId();
         }catch(Exception ex){
             throw ex;

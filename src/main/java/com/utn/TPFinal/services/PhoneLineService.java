@@ -50,7 +50,7 @@ public class PhoneLineService {
 
     public int add(PhoneLine phoneLine) throws Exception, ValidationException, ResourceAlreadyExistExeption {
         try{
-            if(phoneLineRepository.existsById(phoneLine.getId())){throw new ResourceAlreadyExistExeption("PhoneLine");}
+            if(phoneLine.getId()!=null && phoneLineRepository.existsById(phoneLine.getId())){throw new ResourceAlreadyExistExeption("PhoneLine");}
             if(phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.LANDLINE) || phoneLine.getPhoneLineType().getName().equals(PhoneLineTypes.MOVIL)){
                 return phoneLineRepository.save(phoneLine).getId();
             }else{

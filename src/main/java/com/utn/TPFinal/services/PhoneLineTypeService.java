@@ -2,7 +2,6 @@ package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.PhoneLineType;
 import com.utn.TPFinal.repositories.IPhoneLineTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class PhoneLineTypeService {
 
     public int add(PhoneLineType phoneLineType) throws ResourceAlreadyExistExeption, Exception {
         try{
-            if(phoneLineTypeRepository.existsById(phoneLineType.getId())){throw new ResourceAlreadyExistExeption("PhoneLineType");}
+            if(phoneLineType.getId()!=null && phoneLineTypeRepository.existsById(phoneLineType.getId())){throw new ResourceAlreadyExistExeption("PhoneLineType");}
             return phoneLineTypeRepository.save(phoneLineType).getId();
         }catch(Exception ex){
             throw ex;

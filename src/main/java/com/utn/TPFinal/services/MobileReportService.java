@@ -1,7 +1,6 @@
 package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.MobileReportUserBills;
 import com.utn.TPFinal.model.projections.MobileReportUserCalls;
 import com.utn.TPFinal.model.projections.MobileReportUserCallsRank;

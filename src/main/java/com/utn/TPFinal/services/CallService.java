@@ -1,11 +1,9 @@
 package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.dtos.CallInput;
 import com.utn.TPFinal.model.dtos.CallsReportFilter;
 import com.utn.TPFinal.model.entities.Call;
-import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.InfraResponse;
 import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import com.utn.TPFinal.repositories.ICallRepository;

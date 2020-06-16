@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
+
 @RestControllerAdvice
 public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
@@ -34,6 +36,4 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     public ErrorResponseDto handleResourceAlreadyExist(ResourceAlreadyExistExeption exc) {
         return new ErrorResponseDto(409, exc.getMessage() + " already exists");
     }
-
-
 }

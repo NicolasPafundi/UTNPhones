@@ -6,7 +6,6 @@ import com.utn.TPFinal.model.entities.State;
 import com.utn.TPFinal.repositories.IStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.utn.TPFinal.exceptions.ValidationException;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class StateService {
 
     public int add(State state) throws ResourceAlreadyExistExeption, Exception {
         try{
-            if(stateRepository.existsById(state.getId())){throw new ResourceAlreadyExistExeption("State");}
+            if(state.getId()!=null && stateRepository.existsById(state.getId())){throw new ResourceAlreadyExistExeption("State");}
             return stateRepository.save(state).getId();
         }catch(Exception ex){
             throw ex;

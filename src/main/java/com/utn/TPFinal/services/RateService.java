@@ -2,7 +2,6 @@ package com.utn.TPFinal.services;
 
 import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
-import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.entities.City;
 import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.model.projections.RatesReport;
@@ -42,7 +41,7 @@ public class RateService {
 
     public int add(Rate rate) throws ResourceAlreadyExistExeption, Exception {
         try{
-            if(rateRepository.existsById(rate.getId())){throw new ResourceAlreadyExistExeption("Rate");}
+            if(rate.getId()!=null && rateRepository.existsById(rate.getId())){throw new ResourceAlreadyExistExeption("Rate");}
             return rateRepository.save(rate).getId();
         }catch(Exception ex){
             throw ex;
