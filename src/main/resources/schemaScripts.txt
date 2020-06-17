@@ -188,8 +188,20 @@ begin
 end$$
 DELIMITER ;
 
+/* Billing event*/
 
+DELIMITER $$
+CREATE EVENT ev_monthbilling
+ON SCHEDULE EVERY 1 MONTH
+STARTS '2020-06-01 03:00:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+call sp_monthlyBills();
+END$$
+DELIMITER ;
 
+------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_CallsByUser`(userid int )
 begin
