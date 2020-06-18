@@ -30,39 +30,4 @@ public class CityService {
         }
     }
 
-    public City getById(Integer Id) throws ResourceNotExistException, Exception {
-        try{
-            return cityRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("City"));
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public int add(City city) throws ResourceAlreadyExistExeption, Exception {
-        try{
-            if(city.getId()!=null && cityRepository.existsById(city.getId())){throw new ResourceAlreadyExistExeption("City");}
-            return cityRepository.save(city).getId();
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public void remove(Integer Id) throws ResourceNotExistException, Exception {
-        try{
-            cityRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("City"));
-            cityRepository.deleteById(Id);
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public void update(City city) throws Exception, ResourceNotExistException {
-        try {
-            cityRepository.findById(city.getId()).orElseThrow(()->new ResourceNotExistException("City"));
-            cityRepository.save(city);
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
 }

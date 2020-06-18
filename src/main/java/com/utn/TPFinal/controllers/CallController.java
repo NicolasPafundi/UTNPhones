@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+
+import static com.utn.TPFinal.Utils.RestUtils.GetLocation;
 
 @RestController("")
 @RequestMapping("/api/Call")
@@ -63,7 +67,7 @@ public class CallController {
     @PostMapping("/Employee/reportCallsByUserByDate")
     public  ResponseEntity<List<ReportCallsByUserByDate>> getReportCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody CallsReportFilter callsReportFilter) throws ResourceNotExistException, Exception {
         try{
-            Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
+            sessionManager.getCurrentUser(sessionToken).getId();
             List<ReportCallsByUserByDate> calls = callService.getReportCallsByUserByDate(callsReportFilter);
             return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
@@ -84,7 +88,7 @@ public class CallController {
     }
 
     @PostMapping("/Infrastructure/")
-    public ResponseEntity<InfraResponse> add(@RequestHeader("Authorization") String sessionToken, @RequestBody CallInput call){
+    public ResponseEntity add(@RequestHeader("Authorization") String sessionToken, @RequestBody CallInput call){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(callService.createCall(call));
         }catch (Exception ex){

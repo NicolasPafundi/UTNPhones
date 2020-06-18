@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import static com.utn.TPFinal.Utils.RestUtils.GetLocation;
+
 @RestController("")
 @RequestMapping("/api/User")
 public class UserController {
@@ -68,9 +70,9 @@ public class UserController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser) throws ValidationException, Exception, ResourceAlreadyExistExeption {
+    public ResponseEntity add(@RequestHeader("Authorization") String sessionToken,@RequestBody User newUser) throws ValidationException, Exception, ResourceAlreadyExistExeption {
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(userService.add(newUser));
+            return ResponseEntity.status(HttpStatus.CREATED).body(GetLocation(userService.add(newUser)));
         }catch (Exception | ValidationException ex){
             throw ex;
         }

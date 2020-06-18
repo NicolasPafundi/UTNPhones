@@ -10,4 +10,12 @@ public interface MobileReportUserBills {
     double getTotalPrice();
     Date getCreationDay();
     Date getPayDay();
+
+    void setBillNumber(Integer BillNumber);
+    void setLineNumber(String LineNumber);
+    void setCallsAmount(Integer CallsAmount);
+    void setCostPrice(double CostPrice);
+    void setTotalPrice(double TotalPrice);
+    void setCreationDay(Date CreationDay);
+    void setPayDay(Date PayDay);
 }

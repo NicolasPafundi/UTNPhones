@@ -7,4 +7,8 @@ public interface InfraResponse {
    String getMessage();
    Date getCreatedOn();
 
+   void setCallId(Integer callId);
+   void setMessage(String message);
+   void setCreatedOn(Date date);
+
 }

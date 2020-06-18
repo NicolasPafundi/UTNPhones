@@ -24,39 +24,4 @@ public class UserTypeService {
             throw ex;
         }
     }
-
-    public UserType getById(Integer Id) throws ResourceNotExistException, Exception {
-        try{
-            return userTypeRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("UserType"));
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public int add(UserType userType) throws ResourceAlreadyExistExeption, Exception {
-        try{
-            if(userType.getId()!=null && userTypeRepository.existsById(userType.getId())){throw new ResourceAlreadyExistExeption("UserType");}
-            return userTypeRepository.save(userType).getId();
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public void remove(Integer Id) throws ResourceNotExistException, Exception {
-        try{
-            userTypeRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("UserType"));
-            userTypeRepository.deleteById(Id);
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
-
-    public void update(UserType userType) throws Exception, ResourceNotExistException {
-        try {
-            userTypeRepository.findById(userType.getId()).orElseThrow(()->new ResourceNotExistException("UserType"));
-            userTypeRepository.save(userType);
-        }catch(Exception ex){
-            throw ex;
-        }
-    }
 }

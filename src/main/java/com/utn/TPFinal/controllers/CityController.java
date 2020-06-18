@@ -37,43 +37,4 @@ public class CityController {
             throw ex;
         }
     }
-
-    @GetMapping("/Employee/{id}")
-    public ResponseEntity<City> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws Exception, ResourceNotExistException {
-        try{
-            City city = cityService.getById(id);
-            return (city != null) ? ResponseEntity.ok(city) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws ResourceAlreadyExistExeption, Exception {
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(cityService.add(city));
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody City city) throws Exception, ResourceNotExistException {
-        try{
-            cityService.update(city);
-            return ResponseEntity.ok().build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
-        try{
-            cityService.remove(id);
-            return ResponseEntity.ok().build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
 }

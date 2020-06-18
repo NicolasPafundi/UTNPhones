@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.utn.TPFinal.Utils.RestUtils.GetLocation;
+
 @RestController("")
 @RequestMapping("/api/Rate")
 public class RateController {
@@ -49,9 +51,9 @@ public class RateController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws ResourceAlreadyExistExeption, Exception {
+    public ResponseEntity add(@RequestHeader("Authorization") String sessionToken,@RequestBody Rate rate) throws ResourceAlreadyExistExeption, Exception {
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(rateService.add(rate));
+            return ResponseEntity.status(HttpStatus.CREATED).body(GetLocation(rateService.add(rate)));
         }catch (Exception ex){
             throw ex;
         }

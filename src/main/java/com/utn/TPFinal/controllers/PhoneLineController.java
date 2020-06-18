@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import static com.utn.TPFinal.Utils.RestUtils.GetLocation;
+
 @RestController("")
 @RequestMapping("/api/PhoneLine")
 public class PhoneLineController {
@@ -67,9 +69,9 @@ public class PhoneLineController {
     }
 
     @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException, ResourceAlreadyExistExeption {
+    public ResponseEntity add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException, ResourceAlreadyExistExeption {
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(phoneLineService.add(phoneLine));
+            return ResponseEntity.status(HttpStatus.CREATED).body(GetLocation(phoneLineService.add(phoneLine)));
         }catch (Exception | ValidationException ex){
             throw ex;
         }

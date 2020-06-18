@@ -17,12 +17,10 @@ import java.util.List;
 public class StateController {
 
     private final StateService stateService;
-    private final SessionManager sessionManager;
 
     @Autowired
-    public StateController(StateService stateService, SessionManager sessionManager) {
+    public StateController(StateService stateService) {
         this.stateService = stateService;
-        this.sessionManager = sessionManager;
     }
 
 
@@ -31,45 +29,6 @@ public class StateController {
         try{
             List<State> states = stateService.getAll();
             return (states.size() > 0) ? ResponseEntity.ok(states) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @GetMapping("/Employee/{id}")
-    public ResponseEntity<State> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
-        try{
-            State state = stateService.getById(id);
-            return (state != null) ? ResponseEntity.ok(state) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @PostMapping("/Employee/")
-    public ResponseEntity<Integer> add(@RequestHeader("Authorization") String sessionToken,@RequestBody State state) throws ResourceAlreadyExistExeption, Exception {
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(stateService.add(state));
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @PutMapping("/Employee/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody State state) throws Exception, ResourceNotExistException {
-        try{
-            stateService.update(state);
-            return ResponseEntity.ok().build();
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @DeleteMapping("/Employee/{id}")
-    public ResponseEntity remove(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
-        try{
-            stateService.remove(id);
-            return ResponseEntity.ok().build();
         }catch (Exception ex){
             throw ex;
         }
