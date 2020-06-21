@@ -1,6 +1,6 @@
 /* SP sp_add_call */
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_add_call`(numberlinefrom INT, numberlineto INT, durationmin INT, datecall datetime)
+CREATE DEFINER=`infra`@`%` PROCEDURE `sp_add_call`(numberlinefrom INT, numberlineto INT, durationmin INT, datecall datetime)
 begin
 
 
@@ -58,7 +58,7 @@ end
 /*Call report by user*/
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getCallsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
+CREATE PROCEDURE `sp_getCallsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
 begin
 select
     	c.id as "Id",
@@ -87,7 +87,7 @@ DELIMITER ;
 /*Bills report by user */
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getBillsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
+CREATE PROCEDURE `sp_getBillsByUserByDate`(IN `datefrom` DATE,IN `dateto` DATE, IN `userid` INT)
 begin
 select
 	b2.id as "Bill Number",
@@ -110,7 +110,7 @@ DELIMITER ;
 /* Destinos preferidos*/
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_getDestinationRankByUser`(IN `userid` INT, IN `top` INT)
+CREATE PROCEDURE `sp_getDestinationRankByUser`(IN `userid` INT, IN `top` INT)
 begin
 select
 	concat(	ct2.arecode,pl2.numberline) as "Destination",
@@ -134,7 +134,7 @@ DELIMITER ;
 /* sp_facturarllamadasxlinea */
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_billingCallByLine`(IN `phonelineid` INT)
+CREATE PROCEDURE `sp_billingCallByLine`(IN `phonelineid` INT)
 begin
 
 	/*Get calls to be billed*/
@@ -162,7 +162,7 @@ DELIMITER ;
 /* sp_monthlybills() */
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_monthlyBills`()
+CREATE PROCEDURE `sp_monthlyBills`()
 begin
 
    DECLARE done BOOLEAN DEFAULT 0;
@@ -203,7 +203,7 @@ DELIMITER ;
 
 ------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_CallsByUser`(userid int )
+CREATE PROCEDURE `sp_CallsByUser`(userid int )
 begin
 	select
 		c2.*
@@ -215,7 +215,7 @@ end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_reportCallsByUserByDate`(userid int,datefrom date,dateto date )
+CREATE PROCEDURE `sp_reportCallsByUserByDate`(userid int,datefrom date,dateto date )
 begin
 	select
         concat(
@@ -242,7 +242,7 @@ end$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`npmradmin`@`%` PROCEDURE `sp_ratesBetweenAreaCodes`(areaCodefrom int, areaCodeTo int )
+CREATE PROCEDURE `sp_ratesBetweenAreaCodes`(areaCodefrom int, areaCodeTo int )
 begin
 
 	SET @areaCodeIdFrom = 0;

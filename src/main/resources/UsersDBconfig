@@ -1,0 +1,41 @@
+CREATE USER 'adminphones'@'localhost' IDENTIFIED BY 'rfv12345';
+GRANT Alter ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Create ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Create view ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Delete ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Drop ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Grant option ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Index ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Insert ON utnphones.* TO 'adminphones'@'localhost';
+GRANT References ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Select ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Show view ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Trigger ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Update ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Alter routine ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Create routine ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Create temporary tables ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Execute ON utnphones.* TO 'adminphones'@'localhost';
+GRANT Lock tables ON utnphones.* TO 'adminphones'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'client'@'localhost' IDENTIFIED BY 'qaz12345';
+GRANT Execute ON utnphones.* TO 'client'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'empleado'@'localhost' IDENTIFIED BY 'wsx12345';
+GRANT Execute ON utnphones.* TO 'empleado'@'localhost';
+GRANT Select ON utnphones.* TO 'empleado'@'localhost';
+GRANT Insert ON utnphones.* TO 'empleado'@'localhost';
+GRANT Update ON utnphones.* TO 'empleado'@'localhost';
+GRANT Delete ON utnphones.* TO 'empleado'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'infra'@'localhost' IDENTIFIED BY 'edc12345';
+GRANT Execute ON utnphones.sp_add_call TO 'infra'@'localhost';
+GRANT Select ON utnphones.cities TO 'infra'@'localhost';
+GRANT Select ON utnphones.rates TO 'infra'@'localhost';
+GRANT Select ON utnphones.phonelines TO 'infra'@'localhost';
+GRANT Insert ON utnphones.calls TO 'infra'@'localhost';
+GRANT Select ON utnphones.calls TO 'infra'@'localhost';
+FLUSH PRIVILEGES;
