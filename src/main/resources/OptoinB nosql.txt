@@ -1,0 +1,86 @@
+BUCKET_DATA : [
+{
+	"key" 	: "City::223",
+	"name" 	: "Mar del Plata",
+	"AreaCode" : 223,
+	"State" : "Buenos Aires",
+	"Country": "Argentina",
+	"Rates" : [
+				{ "callTo" : "011", "MinPrice" : 5 },
+				{ "callTo" : "0223", "MinPrice" : 10 },
+				{ "callTo" : "240", "MinPrice" : 5	}
+			  ]
+},
+{
+	"key" : "User:wgarcia",
+	"username" : "wgarcia",
+	"password" : "123456",
+	"firstName" : "Walter",
+	"lastName" : "Garcia",
+	"dni" : "12345678",
+	"type" : "Cliente",
+	"city" : {
+				"name" : "Mar del Plata",
+				"State" : "Buenos Aires",
+				"Country" : "Argentina"
+			 },
+	"phonelines" : [
+					{
+					 "numberLine" : "4891234",
+					 "areCode" : "223",
+					 "Type" : "Home",
+					 "Calls": [
+					 			{ "callTo" : "114847894", "duration" : "10", "date" : "2020-01-01 18:29:00","price":20},
+					 			{ "callTo" : "2404866794", "duration" : "6", "date" : "2020-01-02 11:15:15", "price":16},
+					 			{ "callTo" : "2314119455", "duration" : "3", "date" : "2020-01-03 08:48:34", "price":36}
+					 		  ],
+					 "Bills" : [
+					 			{"number" : "123", "callsAmount": 10, "priceCost": "100", "priceTotal": "120","createDate":"2020-02-01","paydate":"2020-02-15","paid":"false"},
+					 			{"number" : "127", "callsAmount": 5, "priceCost": "90", "priceTotal": "110","createDate":"2020-03-01","paydate":"2020-03-15","paid":"false"},
+					 			{"number" : "134", "callsAmount": 8, "priceCost": "150", "priceTotal": "170","createDate":"2020-04-01","paydate":"2020-04-15","paid":"false"},
+
+					 		   ]
+					},
+					{
+					 "numberLine" : "4892345",
+					 "areCode" : "223",
+					 "Type" : "Mobile",
+					 "Calls": [
+					 			{ "callTo" : "114847894", "duration" : "10", "date" : "2020-01-01 18:29:00","price":20},
+					 			{ "callTo" : "2404866794", "duration" : "6", "date" : "2020-01-02 11:15:15", "price":16},
+					 			{ "callTo" : "2314119455", "duration" : "3", "date" : "2020-01-03 08:48:34", "price":36}
+					 		  ],
+					 "Bills" : [
+					 			{"number" : "124", "callsAmount": 4, "priceCost": "50", "priceTotal": "70","createDate":"2020-02-01","paydate":"2020-02-15","paid":"false"}
+					 		   ]
+					},
+				   ],
+	"Bills": [
+				{"number" : "123","numberLine":"2234891234", "callsAmount": 10, "priceCost": "100", "priceTotal": "120","createDate":"2020-02-01","paydate":"2020-02-15","paid":"false"},
+				{"number" : "124","numberLine": "2234892345", "callsAmount": 9, "priceCost": "50", "priceTotal": "70","createDate":"2020-02-01","paydate":"2020-02-15","paid":"false"},
+				{"number" : "127","numberLine":"2234891234", "callsAmount": 5, "priceCost": "90", "priceTotal": "110","createDate":"2020-03-01","paydate":"2020-03-15","paid":"false"},
+				{"number" : "134","numberLine":"2234891234", "callsAmount": 8, "priceCost": "150", "priceTotal": "170","createDate":"2020-04-01","paydate":"2020-04-15","paid":"false"}
+			 ]
+	
+},
+{
+	"key" : "Call::2234891234",
+	"callTo" : "114847894",
+	"date" : "2020-02-02 18:45:02",
+	"minPrice" : "5",
+	"user" : [ {"username" : "wgarcia",	"firstName" : "Walter",	"lastName" : "Garcia",	"dni" : "12345678"}]
+}
+{
+	"key" : "Bill::123",
+	"numberLine" : "2234891234",
+	"user" : [ {"username" : "wgarcia",	"firstName" : "Walter",	"lastName" : "Garcia",	"dni" : "12345678"}],
+	"calls": [
+			  { "callTo" : "114847894", "duration" : "10", "date" : "2020-01-01 18:29:00","price":20},
+			  { "callTo" : "2404866794", "duration" : "6", "date" : "2020-01-02 11:15:15", "price":16},
+			  { "callTo" : "2314119455", "duration" : "3", "date" : "2020-01-03 08:48:34", "price":36}
+			 ],
+	"createDate": "2020-01-01",
+	"payDate" : "2020-01-15",
+	"paid" : "false"
+}
+]
