@@ -1,0 +1,142 @@
+-- utnphones.phonelinetype definition
+
+CREATE TABLE `phonelinetype` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phonelinetype_un` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.states definition
+
+CREATE TABLE `states` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `state_un` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.usertypes definition
+
+CREATE TABLE `usertypes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usertype_un` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.cities definition
+
+CREATE TABLE `cities` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `state_id` int(11) NOT NULL,
+  `arecode` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cities_un` (`name`,`state_id`),
+  KEY `cities_fk` (`state_id`),
+  CONSTRAINT `cities_states_fk` FOREIGN KEY (`id`) REFERENCES `states` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.rates definition
+
+CREATE TABLE `rates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cityid_from` int(11) NOT NULL,
+  `cityid_to` int(11) NOT NULL,
+  `price` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cityidfrom_cityidto` (`cityid_from`,`cityid_to`),
+  KEY `rates_cityidfrom_fk` (`cityid_from`),
+  KEY `rates_cityidto_fk` (`cityid_to`),
+  CONSTRAINT `rates_cityidfrom_fk` FOREIGN KEY (`cityid_from`) REFERENCES `cities` (`id`),
+  CONSTRAINT `rates_cityidto_fk` FOREIGN KEY (`cityid_to`) REFERENCES `cities` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.users definition
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `password` varchar(10) NOT NULL,
+  `name` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `lastname` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `dni` varchar(100) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `usertype_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_un` (`dni`),
+  UNIQUE KEY `username_un` (`username`),
+  KEY `users_usertypes_fk` (`usertype_id`),
+  KEY `users_cities_fk` (`city_id`),
+  CONSTRAINT `users_cities_fk` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  CONSTRAINT `users_usertypes_fk` FOREIGN KEY (`usertype_id`) REFERENCES `usertypes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.phonelines definition
+
+CREATE TABLE `phonelines` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `numberline` int(11) NOT NULL,
+  `phonelinetype_id` int(11) NOT NULL,
+  `active` BIT DEFAULT 1 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `numberline_un` (`numberline`),
+  KEY `phonelines_users_fk` (`user_id`),
+  KEY `phonelines_phonelinetype_fk` (`phonelinetype_id`),
+  KEY `phonelines_city_fk` (`city_id`),
+  CONSTRAINT `phonelines_city_fk` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  CONSTRAINT `phonelines_phonelinetype_fk` FOREIGN KEY (`phonelinetype_id`) REFERENCES `phonelinetype` (`id`),
+  CONSTRAINT `phonelines_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.bills definition
+
+CREATE TABLE `bills` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phoneline_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `calls_amount` int(11) NOT NULL,
+  `price_cost` decimal(10,0) NOT NULL,
+  `price_final` decimal(10,0) NOT NULL,
+  `paid` BIT DEFAULT 0 NOT NULL,
+  `payday` date NOT NULL,
+  `createdon` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bills_phonelines_fk` (`phoneline_id`),
+  KEY `bills_users_fk` (`user_id`),
+  CONSTRAINT `bills_phonelines_fk` FOREIGN KEY (`phoneline_id`) REFERENCES `phonelines` (`id`),
+  CONSTRAINT `bills_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+-- utnphones.calls definition
+
+CREATE TABLE `calls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lineid_from` int(11) NOT NULL,
+  `lineid_to` int(11) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `rate_id` int(11) NOT NULL,
+  `amount` decimal(10,0) NOT NULL,
+  `bill_id` int(11) DEFAULT NULL,
+  `createdon` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `calls_bills_fk` (`bill_id`),
+  KEY `calls_rates_fk` (`rate_id`),
+  KEY `calls_lineidfrom_fk` (`lineid_from`),
+  KEY `calls_lineidto_fk` (`lineid_to`),
+  CONSTRAINT `calls_bills_fk` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`id`),
+  CONSTRAINT `calls_lineidfrom_fk` FOREIGN KEY (`lineid_from`) REFERENCES `phonelines` (`id`),
+  CONSTRAINT `calls_lineidto_fk` FOREIGN KEY (`lineid_to`) REFERENCES `phonelines` (`id`),
+  CONSTRAINT `calls_rates_fk` FOREIGN KEY (`rate_id`) REFERENCES `rates` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;

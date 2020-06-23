@@ -27,7 +27,15 @@ begin
 
     		insert into calls (lineid_from ,lineid_to ,duration , rate_id , amount ,createdon )
     		values (@linefrom, @lineto, durationmin, @rateId, (@minprice * cast(durationmin as DECIMAL(10,2) )), datecall);
-    		SELECT * from calls c where id = LAST_INSERT_ID();
+    		SELECT
+    		    c2.id,
+                c2.lineid_from,
+                c2.lineid_to,
+                c2.duration,
+                c2.rate_id,
+                c2.amount,
+                c2.createdon
+    		from calls c2 where id = LAST_INSERT_ID();
 
     	else
     		if(@rateId = 0)
@@ -206,7 +214,13 @@ DELIMITER $$
 CREATE PROCEDURE `sp_CallsByUser`(userid int )
 begin
 	select
-		c2.*
+		c2.id,
+		c2.lineid_from,
+		c2.lineid_to,
+		c2.duration,
+		c2.rate_id,
+		c2.amount,
+		c2.createdon
 	from calls c2
 	inner join phonelines p2 on c2.lineid_from = p2.id
 	inner join users u2 on p2.user_id = u2.id
