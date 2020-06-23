@@ -45,44 +45,44 @@ public class CallController {
     }
 
     @GetMapping("/Employee/{id}")
-    public ResponseEntity<Call> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
+    public ResponseEntity<Call> getById(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException {
         try{
             Call call= callService.getById(id);
             return (call != null) ? ResponseEntity.ok(call) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
 
     @GetMapping("/Employee/User/{id}")
-    public ResponseEntity<List<Call>> getByUserId(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException, Exception {
+    public ResponseEntity<List<Call>> getByUserId(@RequestHeader("Authorization") String sessionToken,@PathVariable Integer id) throws ResourceNotExistException {
         try{
             List<Call> calls = callService.getByUserId(id);
             return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
 
     @PostMapping("/Employee/reportCallsByUserByDate")
-    public  ResponseEntity<List<ReportCallsByUserByDate>> getReportCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody CallsReportFilter callsReportFilter) throws ResourceNotExistException, Exception {
+    public  ResponseEntity<List<ReportCallsByUserByDate>> getReportCallsByUserByDate(@RequestHeader("Authorization") String sessionToken, @RequestBody CallsReportFilter callsReportFilter) throws ResourceNotExistException {
         try{
             sessionManager.getCurrentUser(sessionToken).getId();
             List<ReportCallsByUserByDate> calls = callService.getReportCallsByUserByDate(callsReportFilter);
             return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-        } catch (Exception ex) {
+        } catch (ResourceNotExistException ex) {
             throw ex;
         }
     }
 
     @GetMapping("/Client/me")
-    public ResponseEntity<List<Call>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourceNotExistException, Exception {
+    public ResponseEntity<List<Call>> getByCurrentUser(@RequestHeader("Authorization") String sessionToken) throws ResourceNotExistException {
         try{
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             List<Call> calls = callService.getByUserId(userId);
             return (calls.size() > 0) ? ResponseEntity.ok(calls) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -97,11 +97,11 @@ public class CallController {
     }
 
     @PutMapping("/Infrastructure/")
-    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call) throws Exception, ResourceNotExistException {
+    public ResponseEntity update(@RequestHeader("Authorization") String sessionToken,@RequestBody Call call) throws ResourceNotExistException, Exception {
         try{
             callService.update(call);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -111,7 +111,7 @@ public class CallController {
         try{
             callService.remove(id);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }

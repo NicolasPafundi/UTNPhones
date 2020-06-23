@@ -34,7 +34,7 @@ public class PhoneLineService {
     public PhoneLine getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
             return phoneLineRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("PhoneLine"));
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }

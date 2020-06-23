@@ -2,6 +2,7 @@ package com.utn.TPFinal.controller;
 
 import com.utn.TPFinal.controllers.BillController;
 import com.utn.TPFinal.controllers.MobileReportController;
+import com.utn.TPFinal.exceptions.ResourceAlreadyExistExeption;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.dtos.MobileReportFilter;
@@ -55,6 +56,12 @@ public class BillControllerTest {
         verify(service, times(1)).getByUserID(1);
     }
 
+    @Test(expected = ResourceNotExistException.class)
+    public void getByUserIDThrowException() throws ResourceNotExistException, Exception {
+        when(service.getByUserID(any())).thenThrow(new ResourceNotExistException("test"));
+        controller.getByUserID("1",1);
+    }
+
     @Test
     public void getByCurrentUserIDOk() throws ResourceNotExistException, Exception {
         Bill bill = new Bill();
@@ -78,5 +85,16 @@ public class BillControllerTest {
 
         verify(sessionManagerService, times(1)).getCurrentUser("1");
         verify(service, times(1)).getByUserID(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByCurrentUserIDException() throws ResourceNotExistException {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getByUserID(1)).thenThrow(new ResourceNotExistException("test"));
+        controller.getByCurrentUser("1");
     }
 }

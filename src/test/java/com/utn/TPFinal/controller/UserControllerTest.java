@@ -6,6 +6,7 @@ import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.entities.User;
+import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.services.UserService;
 import com.utn.TPFinal.session.SessionManager;
@@ -169,5 +170,42 @@ public class UserControllerTest {
 
         verify(sessionManagerService, times(1)).getCurrentUser("1");
         verify(service, times(1)).remove(1);
+    }
+
+
+
+    @Test(expected = Exception.class)
+    public void getAllException()  {
+        User User = new User();
+        User.setId(1);
+        List<User> Users= new ArrayList<>();
+        Users.add(User);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<User>> returnedUsers= controller.getAll("1");
+    }
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, Exception {
+        User User = new User();
+        User.setId(1);
+
+        when(service.getById(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<User> returnedUser= controller.getById("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, Exception, ValidationException {
+        User User = new User();
+        User.setId(1);
+
+        doThrow(new ResourceNotExistException("test")).when(service).update(User);
+        ResponseEntity returned= controller.update("1",User);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, Exception {
+
+        doThrow(new ResourceNotExistException("test")).when(service).remove(1);
+        ResponseEntity returned= controller.remove("1",1);
     }
 }

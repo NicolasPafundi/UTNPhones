@@ -5,6 +5,7 @@ import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.entities.Rate;
+import com.utn.TPFinal.model.entities.Rate;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.entities.UserType;
 import com.utn.TPFinal.model.projections.MobileReportUserBills;
@@ -118,4 +119,60 @@ public class RateControllerTest {
 
         verify(service, times(1)).getRatesBetweenAreaCodes(1,1);
     }
+
+
+
+    @Test(expected = Exception.class)
+    public void getAllException()  {
+        Rate Rate = new Rate();
+        Rate.setId(1);
+        List<Rate> Rates= new ArrayList<>();
+        Rates.add(Rate);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<Rate>> returnedRates= controller.getAll("1");
+    }
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, Exception {
+        Rate Rate = new Rate();
+        Rate.setId(1);
+
+        when(service.getById(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<Rate> returnedRate= controller.getById("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, Exception, ValidationException {
+        Rate Rate = new Rate();
+        Rate.setId(1);
+
+        doThrow(new ResourceNotExistException("test")).when(service).update(Rate);
+        ResponseEntity returned= controller.update("1",Rate);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, Exception {
+
+        doThrow(new ResourceNotExistException("test")).when(service).remove(1);
+        ResponseEntity returned= controller.remove("1",1);
+    }
+
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getRatesBetweenAreaCodesException() throws ResourceNotExistException, Exception {
+        Integer areaCodeFrom =1;
+        Integer areaCodeTo = 1;
+
+        List<RatesReport> ratesreports=new ArrayList<>();
+
+        RatesReport ratesReport = factory.createProjection(RatesReport.class);
+        ratesReport.setDestino("1");
+        ratesReport.setOrigen("1");
+        ratesReport.setPrecio(1);
+        ratesreports.add(ratesReport);
+
+        when(service.getRatesBetweenAreaCodes(1,1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<RatesReport>> returnedRate= controller.getRatesBetweenAreaCodes("1",1,1);
+    }
+
 }

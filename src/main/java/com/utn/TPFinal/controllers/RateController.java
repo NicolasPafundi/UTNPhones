@@ -45,7 +45,7 @@ public class RateController {
         try{
             Rate rate = rateService.getById(id);
             return (rate != null) ? ResponseEntity.ok(rate) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -64,7 +64,7 @@ public class RateController {
         try{
             rateService.update(rate);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -74,7 +74,7 @@ public class RateController {
         try{
             rateService.remove(id);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -88,7 +88,7 @@ public class RateController {
             List<RatesReport> report = rateService.getRatesBetweenAreaCodes(areaCodeFrom,areaCodeTo);
             return (report.size() > 0)? ResponseEntity.ok(report) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }

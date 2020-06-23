@@ -42,4 +42,15 @@ public class PhoneLineTypeControllerTest {
 
         verify(service, times(1)).getAll();
     }
+
+    @Test(expected = Exception.class)
+    public void getAllException() throws ResourceNotExistException, Exception {
+        PhoneLineType PhoneLineType = new PhoneLineType();
+        PhoneLineType.setId(1);
+        List<PhoneLineType> PhoneLineTypes= new ArrayList<>();
+        PhoneLineTypes.add(PhoneLineType);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        controller.getAll("1");
+    }
 }

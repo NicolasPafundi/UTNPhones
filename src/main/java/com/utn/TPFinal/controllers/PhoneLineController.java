@@ -42,7 +42,7 @@ public class PhoneLineController {
         try{
             PhoneLine phoneLine = phoneLineService.getById(id);
             return (phoneLine != null) ? ResponseEntity.ok(phoneLine) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -52,7 +52,7 @@ public class PhoneLineController {
         try{
             List<PhoneLine> phoneLines = phoneLineService.getByUser(id);
             return (phoneLines.size() > 0) ? ResponseEntity.ok(phoneLines) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -63,7 +63,7 @@ public class PhoneLineController {
             Integer userId= sessionManager.getCurrentUser(sessionToken).getId();
             List<PhoneLine> phoneLines = phoneLineService.getByUser(userId);
             return (phoneLines.size() > 0) ? ResponseEntity.ok(phoneLines) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -72,7 +72,7 @@ public class PhoneLineController {
     public ResponseEntity add(@RequestHeader("Authorization") String sessionToken,@RequestBody PhoneLine phoneLine) throws Exception, ValidationException, ResourceAlreadyExistExeption {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(GetLocation(phoneLineService.add(phoneLine)));
-        }catch (Exception | ValidationException ex){
+        }catch (ResourceAlreadyExistExeption | ValidationException ex){
             throw ex;
         }
     }
@@ -82,7 +82,7 @@ public class PhoneLineController {
         try{
             phoneLineService.update(phoneLine);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (ResourceNotExistException | ValidationException ex){
             throw ex;
         }
     }
@@ -92,7 +92,7 @@ public class PhoneLineController {
         try{
             phoneLineService.remove(id);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }

@@ -43,7 +43,7 @@ public class UserController {
         try{
             List<User> users = userService.getAllByUserType(id);
             return (users.size() > 0) ? ResponseEntity.ok(users) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -53,7 +53,7 @@ public class UserController {
         try{
             User userResult = userService.getById(id);
             return (userResult != null) ? ResponseEntity.ok(userResult) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
            throw ex;
         }
     }
@@ -64,7 +64,7 @@ public class UserController {
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             User userResult = userService.getById(userId);
             return (userResult != null) ? ResponseEntity.ok(userResult) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -83,7 +83,7 @@ public class UserController {
         try{
             userService.update(userUpdate);
             return ResponseEntity.ok().build();
-        }catch (Exception | ValidationException ex){
+        }catch (ResourceNotExistException | ValidationException ex){
             throw ex;
         }
     }
@@ -97,7 +97,7 @@ public class UserController {
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }catch (Exception | ValidationException ex){
+        }catch (ResourceNotExistException | ValidationException ex){
             throw ex;
         }
     }
@@ -107,7 +107,7 @@ public class UserController {
         try{
             userService.remove(id);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -118,7 +118,7 @@ public class UserController {
             Integer userId = sessionManager.getCurrentUser(sessionToken).getId();
             userService.remove(userId);
             return ResponseEntity.ok().build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }

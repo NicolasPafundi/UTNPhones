@@ -41,4 +41,15 @@ public class UserTypeControllerTest {
 
         verify(service, times(1)).getAll();
     }
+
+    @Test(expected = Exception.class)
+    public void getAllException() throws ResourceNotExistException, Exception {
+        UserType UserType = new UserType();
+        UserType.setId(1);
+        List<UserType> UserTypes= new ArrayList<>();
+        UserTypes.add(UserType);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<UserType>> returnedUserTypes= controller.getAll("1");
+    }
 }

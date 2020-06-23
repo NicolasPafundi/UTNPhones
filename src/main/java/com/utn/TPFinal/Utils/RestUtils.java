@@ -8,7 +8,7 @@ public class RestUtils {
     public static URI GetLocation(Integer id) {
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path("/"+id)
                 .buildAndExpand()
                 .toUri();
     }

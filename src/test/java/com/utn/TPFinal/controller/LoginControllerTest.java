@@ -66,6 +66,25 @@ public class LoginControllerTest {
         verify(service, times(1)).getByUserNameAndPassword(loginInput);
     }
 
+    @Test(expected = InvalidLoginException.class)
+    public void loginException() throws ResourceNotExistException, Exception, ValidationException, InvalidLoginException {
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        LoginInput loginInput = new LoginInput();
+        loginInput.setPassword("test");
+        loginInput.setUserName("test");
+
+        when(sessionManagerService.createSession(user)).thenReturn("token1234");
+        when(service.getByUserNameAndPassword(loginInput)).thenThrow(new InvalidLoginException());
+        ResponseEntity returnedToken= controller.login(loginInput);
+    }
+
     @Test
     public void logoutOk() throws ResourceNotExistException, Exception, ValidationException, InvalidLoginException {
 

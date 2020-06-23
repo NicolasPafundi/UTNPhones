@@ -43,7 +43,7 @@ public class CallControllerTest {
     }
 
     @Test
-    public void getAllOk() throws ResourceNotExistException, Exception {
+    public void getAllOk()  {
         Call Call = new Call();
         Call.setId(1);
         List<Call> Calls= new ArrayList<>();
@@ -59,7 +59,7 @@ public class CallControllerTest {
     }
 
     @Test
-    public void getByIdOk() throws ResourceNotExistException, Exception {
+    public void getByIdOk() throws ResourceNotExistException {
         Call Call = new Call();
         Call.setId(1);
 
@@ -71,6 +71,7 @@ public class CallControllerTest {
 
         verify(service, times(1)).getById(1);
     }
+
 
     @Test
     public void GetByUserIdOk() throws ResourceNotExistException, Exception {
@@ -88,6 +89,7 @@ public class CallControllerTest {
 
         verify(service, times(1)).getByUserId(1);
     }
+
 
     @Test
     public void getReportCallsByUserByDateOk() throws ResourceNotExistException, Exception {
@@ -127,6 +129,8 @@ public class CallControllerTest {
         verify(sessionManagerService, times(1)).getCurrentUser("1");
         verify(service, times(1)).getReportCallsByUserByDate(callsReportFilter);
     }
+
+
 
     @Test
     public void getByCurrentUserOk() throws ResourceNotExistException, Exception {
@@ -168,6 +172,104 @@ public class CallControllerTest {
 
         verify(service, times(1)).update(Call);
     }
+
+    @Test
+    public void removeOk() throws ResourceNotExistException, Exception {
+
+        doNothing().when(service).remove(1);
+        ResponseEntity returned= controller.remove("1",1);
+
+        assertNotNull(returned);
+        assertEquals(returned.getStatusCodeValue(), 200);
+
+        verify(service, times(1)).remove(1);
+    }
+
+    @Test(expected = Exception.class)
+    public void getAllException()  {
+        Call Call = new Call();
+        Call.setId(1);
+        List<Call> Calls= new ArrayList<>();
+        Calls.add(Call);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<Call>> returnedCalls= controller.getAll("1");
+    }
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException {
+        Call Call = new Call();
+        Call.setId(1);
+
+        when(service.getById(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<Call> returnedCall= controller.getById("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void GetByUserIdException() throws ResourceNotExistException {
+        Call Call = new Call();
+        Call.setId(1);
+        List<Call> Calls= new ArrayList<>();
+        Calls.add(Call);
+
+        when(service.getByUserId(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<Call>> returnedCalls= controller.getByUserId("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getReportCallsByUserByDateException() throws ResourceNotExistException {
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        CallsReportFilter callsReportFilter = new CallsReportFilter();
+        callsReportFilter.setDateFrom(new Date());
+        callsReportFilter.setDateTo(new Date());
+        callsReportFilter.setUserId(1);
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getReportCallsByUserByDate(callsReportFilter)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<ReportCallsByUserByDate>> returnedReportCallsByUserByDates= controller.getReportCallsByUserByDate("1",callsReportFilter);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByCurrentUserException() throws ResourceNotExistException {
+        Call Call = new Call();
+        Call.setId(1);
+        List<Call> Calls= new ArrayList<>();
+        Calls.add(Call);
+
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getByUserId(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<Call>> returnedCalls= controller.getByCurrentUser("1");
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, Exception {
+        Call Call = new Call();
+        Call.setId(1);
+
+        doThrow(new ResourceNotExistException("test")).when(service).update(Call);
+        ResponseEntity returned= controller.update("1",Call);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, Exception {
+
+        doThrow(new ResourceNotExistException("test")).when(service).remove(1);
+        ResponseEntity returned= controller.remove("1",1);
+    }
 /*
     @Test
     public void addOk() throws ResourceNotExistException, Exception {
@@ -189,17 +291,6 @@ public class CallControllerTest {
         assertEquals(returned.getStatusCodeValue(), 200);
 
         verify(service, times(1)).createCall(Call);
-    }
-*/
-    @Test
-    public void removeOk() throws ResourceNotExistException, Exception {
+    }*/
 
-        doNothing().when(service).remove(1);
-        ResponseEntity returned= controller.remove("1",1);
-
-        assertNotNull(returned);
-        assertEquals(returned.getStatusCodeValue(), 200);
-
-        verify(service, times(1)).remove(1);
-    }
 }

@@ -33,7 +33,7 @@ public class CityControllerTest {
     }
 
     @Test
-    public void GetByUserIdOk() throws ResourceNotExistException, Exception {
+    public void getAllByStateOk() throws ResourceNotExistException, Exception {
         City City = new City();
         City.setId(1);
         List<City> Cities= new ArrayList<>();
@@ -47,5 +47,11 @@ public class CityControllerTest {
         assertEquals(returnedCities.getBody().get(0), Cities.get(0));
 
         verify(service, times(1)).getAllByState(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getAllByStateException() throws ResourceNotExistException, Exception {
+        when(service.getAllByState(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<City>> returnedCities= controller.getAllByState("1",1);
     }
 }

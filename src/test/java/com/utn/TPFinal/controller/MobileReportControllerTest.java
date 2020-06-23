@@ -1,6 +1,7 @@
 package com.utn.TPFinal.controller;
 
 import com.utn.TPFinal.controllers.MobileReportController;
+import com.utn.TPFinal.exceptions.InvalidLoginException;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.Enum.UserTypes;
 import com.utn.TPFinal.model.dtos.CallsReportFilter;
@@ -76,6 +77,25 @@ public class MobileReportControllerTest {
         verify(service, times(1)).getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1);
     }
 
+    @Test(expected = ResourceNotExistException.class)
+    public void getCallsByUserByDateException() throws ResourceNotExistException {
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        MobileReportFilter mobileReportFilter = new MobileReportFilter();
+        mobileReportFilter.setDateFrom(new Date());
+        mobileReportFilter.setDateTo(new Date());
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<MobileReportUserCalls>> returnedMobileReportUserCallsList= controller.getCallsByUserByDate("1",mobileReportFilter);
+    }
+
     @Test
     public void getBillsByUserByDateOk() throws ResourceNotExistException, Exception {
         UserType userType = new UserType();
@@ -116,8 +136,27 @@ public class MobileReportControllerTest {
         verify(service, times(1)).getBillsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(), 1);
     }
 
+    @Test(expected = ResourceNotExistException.class)
+    public void getBillsByUserByDateException() throws ResourceNotExistException {
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        MobileReportFilter mobileReportFilter = new MobileReportFilter();
+        mobileReportFilter.setDateFrom(new Date());
+        mobileReportFilter.setDateTo(new Date());
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getBillsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<MobileReportUserBills>> returnedMobileReportUserBills= controller.getBillsByUserByDate("1", mobileReportFilter);
+    }
+
     @Test
-    public void getDestinationRankByUserOk() throws ResourceNotExistException, Exception {
+    public void getDestinationRankByUserOk() throws ResourceNotExistException {
         UserType userType = new UserType();
         userType.setName(UserTypes.EMPLOYEE);
         User user = new User();
@@ -145,5 +184,28 @@ public class MobileReportControllerTest {
 
         verify(sessionManagerService, times(1)).getCurrentUser("1");
         verify(service, times(1)).getDestinationRankByUser(1,10);
+    }
+    @Test(expected = ResourceNotExistException.class)
+    public void getDestinationRankByUserException() throws ResourceNotExistException {
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        List<MobileReportUserCallsRank> mobileReportUserCallsRanks= new ArrayList<>();
+
+        MobileReportUserCallsRank mobileReportUserCallsRank = factory.createProjection(MobileReportUserCallsRank.class);
+        mobileReportUserCallsRank.setDestination("1");
+        mobileReportUserCallsRank.setCallAmount(1);
+
+        mobileReportUserCallsRanks.add(mobileReportUserCallsRank);
+
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getDestinationRankByUser(1,10)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<MobileReportUserCallsRank>> returnedMobileReportUserCallsRank= controller.getDestinationRankByUser("1", 10);
     }
 }

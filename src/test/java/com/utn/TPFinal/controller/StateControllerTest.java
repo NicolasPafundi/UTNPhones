@@ -41,4 +41,15 @@ public class StateControllerTest {
 
         verify(service, times(1)).getAll();
     }
+
+    @Test(expected = Exception.class)
+    public void getAllException() throws ResourceNotExistException, Exception {
+        State State = new State();
+        State.setId(1);
+        List<State> States= new ArrayList<>();
+        States.add(State);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<State>> returnedStates= controller.getAll("1");
+    }
 }

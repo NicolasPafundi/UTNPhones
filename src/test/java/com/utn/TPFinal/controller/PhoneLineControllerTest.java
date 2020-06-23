@@ -4,6 +4,8 @@ import com.utn.TPFinal.controllers.PhoneLineController;
 import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.exceptions.ValidationException;
 import com.utn.TPFinal.model.Enum.UserTypes;
+import com.utn.TPFinal.model.dtos.CallsReportFilter;
+import com.utn.TPFinal.model.entities.PhoneLine;
 import com.utn.TPFinal.model.entities.PhoneLine;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.entities.UserType;
@@ -15,6 +17,7 @@ import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -134,5 +137,72 @@ public class PhoneLineControllerTest {
         assertEquals(returned.getStatusCodeValue(), 200);
 
         verify(service, times(1)).remove(1);
+    }
+
+
+    @Test(expected = Exception.class)
+    public void getAllException()  {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+        List<PhoneLine> PhoneLines= new ArrayList<>();
+        PhoneLines.add(PhoneLine);
+
+        when(service.getAll()).thenThrow((Class<? extends Throwable>) null);
+        ResponseEntity<List<PhoneLine>> returnedPhoneLines= controller.getAll("1");
+    }
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, Exception {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+
+        when(service.getById(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<PhoneLine> returnedPhoneLine= controller.getById("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void GetByUserIdException() throws ResourceNotExistException, Exception {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+        List<PhoneLine> PhoneLines= new ArrayList<>();
+        PhoneLines.add(PhoneLine);
+
+        when(service.getByUser(1)).thenThrow(new ResourceNotExistException("test"));
+        ResponseEntity<List<PhoneLine>> returnedPhoneLines= controller.getByUserId("1",1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByCurrentUserException() throws ResourceNotExistException, Exception {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+        List<PhoneLine> PhoneLines= new ArrayList<>();
+        PhoneLines.add(PhoneLine);
+
+        UserType userType = new UserType();
+        userType.setName(UserTypes.EMPLOYEE);
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        user.setUserType(userType);
+
+        when(sessionManagerService.getCurrentUser("1")).thenReturn(user);
+        when(service.getByUser(1)).thenThrow(new ResourceNotExistException("test"));
+        controller.getByCurrentUser("1");
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, Exception, ValidationException {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+
+        doThrow(new ResourceNotExistException("test")).when(service).update(PhoneLine);
+        ResponseEntity returned= controller.update("1",PhoneLine);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, Exception {
+
+        doThrow(new ResourceNotExistException("test")).when(service).remove(1);
+        ResponseEntity returned= controller.remove("1",1);
     }
 }

@@ -33,7 +33,7 @@ public class CityController {
         try{
             List<City> cities = cityService.getAllByState(id);
             return (cities.size() > 0) ? ResponseEntity.ok(cities) : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (Exception ex){
+        }catch (ResourceNotExistException ex){
             throw ex;
         }
     }
