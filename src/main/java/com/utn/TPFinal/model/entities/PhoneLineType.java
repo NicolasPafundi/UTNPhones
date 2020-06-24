@@ -18,6 +18,7 @@ public class PhoneLineType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
+	@Enumerated(EnumType.STRING)
 	@Column(name="name")
 	private String name;
 

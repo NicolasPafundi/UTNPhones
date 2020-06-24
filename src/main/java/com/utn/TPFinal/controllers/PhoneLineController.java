@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("")
-@RequestMapping("/api/PhoneLine")
+@RequestMapping("/PhoneLine")
 public class PhoneLineController {
 
     private final PhoneLineService phoneLineService;
@@ -58,7 +58,7 @@ public class PhoneLineController {
     }
 
     @GetMapping("/GetCantCellphoneLines")
-    public ResponseEntity<Integer> getCantCellphoneLines(@RequestHeader("Authorization") String sessionToken) {
+    public ResponseEntity<Integer> getCantCellphoneLines() {
         try{
             Integer cellphoneLines = phoneLineService.getCantCellphoneLines();
             return ResponseEntity.ok(cellphoneLines);

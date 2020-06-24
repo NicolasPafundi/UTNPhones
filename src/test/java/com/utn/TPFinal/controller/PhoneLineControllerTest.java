@@ -28,7 +28,7 @@ public class PhoneLineControllerTest {
     public void TestGetCantCellphoneLinesOK() throws UserNotexistException {
 
         when(service.getCantCellphoneLines()).thenReturn(2);
-        ResponseEntity<Integer> cellphonelines= controller.getCantCellphoneLines("1");
+        ResponseEntity<Integer> cellphonelines= controller.getCantCellphoneLines();
 
         assertNotNull(cellphonelines.getBody());
         assertTrue(cellphonelines.getBody() == 2);
