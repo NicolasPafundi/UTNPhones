@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 public class IntegrationComponent {
 
     private RestTemplate rest;
-    private static String url = "http://localhost:8080/calls/1";
+    private static String url = "http://localhost:8080/Call/1";
 
     @PostConstruct
     private void init() {
@@ -21,7 +21,7 @@ public class IntegrationComponent {
                 .build();
     }
 
-    public Call getCallsFromApi() {
+    public Call getCallFromApi() {
         return rest.getForObject(url, Call.class);
     }
 
