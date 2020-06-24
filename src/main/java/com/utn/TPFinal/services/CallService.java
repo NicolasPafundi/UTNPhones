@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class CallService {
     private final ICallRepository callRepository;
@@ -77,7 +79,7 @@ public class CallService {
     public Call getLastCallByDni(String dni) {
         try {
             User user = userRepository.findByDni(dni);
-            if (user != null) {
+            if (!isNull(user)) {
                return callRepository.getLastCallByUserId(user.getDni());
             }
             return null;
