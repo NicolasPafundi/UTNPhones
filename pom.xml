@@ -120,7 +120,6 @@
 							<exclude>com/utn/TPFinal/model/**</exclude>
 							<exclude>com/utn/TPFinal/config/**</exclude>
 							<exclude>com/utn/TPFinal/session/**</exclude>
-							<exclude>com/utn/TPFinal/repositories/**</exclude>
 							<exclude>com/utn/TPFinal/Utils/**</exclude>
 							<exclude>com/utn/TPFinal/exceptions/**</exclude>
 							</excludes>
