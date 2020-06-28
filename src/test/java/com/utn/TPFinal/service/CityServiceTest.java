@@ -62,4 +62,10 @@ public class CityServiceTest {
         verify(CityRepository, times(1)).getAllByState(1);
         verify(stateRepository, times(1)).findById(1);
     }
+
+    @Test(expected = Exception.class)
+    public void getAllByStateException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(stateRepository.findById(1)).thenThrow((Class<? extends Throwable>) null);
+        List<City> returnedCitys= service.getAllByState(1);
+    }
 }

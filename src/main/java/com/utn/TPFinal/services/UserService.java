@@ -38,7 +38,7 @@ public class UserService {
         try{
             userTypeRepository.findById(userTypeId).orElseThrow(()->new ResourceNotExistException("UserType"));
             return userRepository.getAllByUserType(userTypeId);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -46,18 +46,23 @@ public class UserService {
     public User getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
             return userRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("User"));
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
 
-    public User getByUserNameAndPassword(LoginInput loginInput) throws ValidationException, InvalidLoginException {
-        if ((loginInput.getUserName() != null) && (loginInput.getPassword() != null)) {
-            User user= userRepository.getByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
-            return Optional.ofNullable(user).orElseThrow(() -> new InvalidLoginException());
-        } else {
-            throw new ValidationException("username and password must have a value");
+    public User getByUserNameAndPassword(LoginInput loginInput) throws ValidationException, InvalidLoginException, Exception {
+        try{
+            if ((loginInput.getUserName() != null) && (loginInput.getPassword() != null)) {
+                User user= userRepository.getByUserNameAndPassword(loginInput.getUserName(), loginInput.getPassword());
+                return Optional.ofNullable(user).orElseThrow(() -> new InvalidLoginException());
+            } else {
+                throw new ValidationException("username and password must have a value");
+            }
+        }catch(Exception ex){
+            throw ex;
         }
+
     }
 
     public int add(User user) throws ValidationException, Exception, ResourceAlreadyExistExeption {
@@ -68,7 +73,7 @@ public class UserService {
             }else{
                 throw new ValidationException("Invalid Type Name");
             }
-        }catch(Exception ex){
+        }catch(ResourceAlreadyExistExeption ex){
             throw ex;
         }
     }
@@ -77,7 +82,7 @@ public class UserService {
         try{
             userRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("User"));
             userRepository.deleteById(Id);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -90,7 +95,7 @@ public class UserService {
             }else{
                 throw new ValidationException("Invalid Type Name");
             }
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }

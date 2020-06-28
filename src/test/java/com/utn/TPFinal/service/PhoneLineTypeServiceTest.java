@@ -48,4 +48,10 @@ public class PhoneLineTypeServiceTest {
 
         verify(PhoneLineTypeRepository, times(1)).findAll();
     }
+
+    @Test(expected = Exception.class)
+    public void getAllException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(PhoneLineTypeRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<PhoneLineType> returnedPhoneLineTypes= service.getAll();
+    }
 }

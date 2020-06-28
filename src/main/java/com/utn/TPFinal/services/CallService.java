@@ -32,7 +32,11 @@ public class CallService {
     }
 
     public Call getById(Integer Id) throws ResourceNotExistException {
+        try {
             return callRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Call"));
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public InfraResponse createCall(CallInput call) {
@@ -45,27 +49,38 @@ public class CallService {
     }
 
     public void remove(Integer Id) throws ResourceNotExistException{
-        callRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Call"));
-        callRepository.deleteById(Id);
+        try {
+            callRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Call"));
+            callRepository.deleteById(Id);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public void update(Call call) throws Exception, ResourceNotExistException {
         try {
             callRepository.findById(call.getId()).orElseThrow(()->new ResourceNotExistException("Call"));
             callRepository.save(call);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
 
     public List<Call> getByUserId(Integer id) throws ResourceNotExistException {
-
-        userRepository.findById(id).orElseThrow(()->new ResourceNotExistException("User"));
-        return callRepository.getByUserId(id);
+        try {
+            userRepository.findById(id).orElseThrow(()->new ResourceNotExistException("User"));
+            return callRepository.getByUserId(id);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public List<ReportCallsByUserByDate> getReportCallsByUserByDate(CallsReportFilter callsReportFilter) throws ResourceNotExistException {
-        userRepository.findById(callsReportFilter.getUserId()).orElseThrow(()->new ResourceNotExistException("User"));
-        return callRepository.getReportCallsByUserByDate(callsReportFilter.getUserId(),callsReportFilter.getDateFrom(),callsReportFilter.getDateTo());
+        try {
+            userRepository.findById(callsReportFilter.getUserId()).orElseThrow(()->new ResourceNotExistException("User"));
+            return callRepository.getReportCallsByUserByDate(callsReportFilter.getUserId(),callsReportFilter.getDateFrom(),callsReportFilter.getDateTo());
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 }

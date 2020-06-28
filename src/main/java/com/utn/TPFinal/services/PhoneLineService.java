@@ -43,7 +43,7 @@ public class PhoneLineService {
         try{
             userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
             return phoneLineRepository.getByUser(userId);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -56,7 +56,7 @@ public class PhoneLineService {
             }else{
                 throw new ValidationException("Invalid Type Name");
             }
-        }catch(Exception ex){
+        }catch(ResourceAlreadyExistExeption ex){
             throw ex;
         }
     }
@@ -65,7 +65,7 @@ public class PhoneLineService {
         try{
             phoneLineRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("PhoneLine"));
             phoneLineRepository.deleteById(Id);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -78,7 +78,7 @@ public class PhoneLineService {
             }else{
                 throw new ValidationException("Invalid Type Name");
             }
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }

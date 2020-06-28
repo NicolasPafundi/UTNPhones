@@ -21,6 +21,7 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -154,5 +155,50 @@ public class RateServiceTest {
 
         verify(CityRepository, times(2)).findByAreaCode(1);
         verify(RateRepository, times(1)).getRatesBetweenAreaCodes(1,1);
+    }
+
+    @Test(expected = Exception.class)
+    public void GetAllException() throws ResourceNotExistException, ResourceNotExistException {
+        when(RateRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<Rate> returnedRates= service.getAll();
+    }
+
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(RateRepository.findById(1)).thenReturn(Optional.empty());
+        Rate returnedRate= service.getById(1);
+    }
+
+    @Test(expected = ResourceAlreadyExistExeption.class)
+    public void addException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption, ValidationException {
+        Rate Rate = new Rate();
+        Rate.setId(1);
+        Rate.setPrice(1);
+
+        when(RateRepository.existsById(1)).thenReturn(true);
+        int returnedId= service.add(Rate);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        when(RateRepository.findById(1)).thenReturn(Optional.empty());
+        service.remove(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption, ValidationException {
+        Rate Rate = new Rate();
+        Rate.setId(1);
+        Rate.setPrice(1);
+
+        when(RateRepository.findById(1)).thenReturn(Optional.empty());
+        service.update(Rate);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getReportCallsByUserByDateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        when(CityRepository.findByAreaCode(1)).thenReturn(null);
+        List<RatesReport> responseRatesReportsList= service.getRatesBetweenAreaCodes(1,1);
     }
 }

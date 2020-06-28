@@ -46,4 +46,10 @@ public class UserTypeServiceTest {
 
         verify(UserTypeRepository, times(1)).findAll();
     }
+
+    @Test(expected = Exception.class)
+    public void getAllException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(UserTypeRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<UserType> returnedUserTypes= service.getAll();
+    }
 }

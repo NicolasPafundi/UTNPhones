@@ -32,15 +32,18 @@ public class BillService {
     }
 
     public List<Bill> getByUserID(Integer id) throws ResourceNotExistException {
-
+        try{
         User user = userRepository.findById(id).orElseThrow(()->new ResourceNotExistException("User"));
         return billRepository.findByUserId(id);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public Bill getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
             return billRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Bill"));
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -49,7 +52,7 @@ public class BillService {
         try{
             if(bill.getId()!=null && billRepository.existsById(bill.getId())){throw new ResourceAlreadyExistExeption("Bill");}
             return billRepository.save(bill).getId();
-        }catch(Exception ex){
+        }catch(ResourceAlreadyExistExeption ex){
             throw ex;
         }
     }
@@ -58,7 +61,7 @@ public class BillService {
         try{
             billRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Bill"));
             billRepository.deleteById(Id);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -67,7 +70,7 @@ public class BillService {
         try {
             billRepository.findById(bill.getId()).orElseThrow(()->new ResourceNotExistException("Bill"));
             billRepository.save(bill);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }

@@ -26,21 +26,32 @@ public class MobileReportService {
 
     public List<MobileReportUserCalls> getCallsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws ResourceNotExistException
     {
-        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
-        return mobileReportRepository.getCallsByUserByDate(dateFrom, dateTo, userId);
+        try{
+            userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
+            return mobileReportRepository.getCallsByUserByDate(dateFrom, dateTo, userId);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public List<MobileReportUserBills> getBillsByUserByDate(Date dateFrom, Date dateTo, Integer userId) throws  ResourceNotExistException
     {
-        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
-        return mobileReportRepository.getBillsByUserByDate(dateFrom, dateTo, userId);
+        try{
+            userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
+            return mobileReportRepository.getBillsByUserByDate(dateFrom, dateTo, userId);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
     public List<MobileReportUserCallsRank> getDestinationRankByUser(Integer userId, Integer top) throws ResourceNotExistException
     {
-        userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
-        return mobileReportRepository.getDestinationRankByUser(userId,top);
-
+        try{
+            userRepository.findById(userId).orElseThrow(()->new ResourceNotExistException("User"));
+            return mobileReportRepository.getDestinationRankByUser(userId,top);
+        }catch(ResourceNotExistException ex){
+            throw ex;
+        }
     }
 
 }

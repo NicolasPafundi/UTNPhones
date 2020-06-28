@@ -34,7 +34,7 @@ public class RateService {
     public Rate getById(Integer Id) throws ResourceNotExistException, Exception {
         try{
             return rateRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Rate"));
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -43,7 +43,7 @@ public class RateService {
         try{
             if(rate.getId()!=null && rateRepository.existsById(rate.getId())){throw new ResourceAlreadyExistExeption("Rate");}
             return rateRepository.save(rate).getId();
-        }catch(Exception ex){
+        }catch(ResourceAlreadyExistExeption ex){
             throw ex;
         }
     }
@@ -52,7 +52,7 @@ public class RateService {
         try{
             rateRepository.findById(Id).orElseThrow(()->new ResourceNotExistException("Rate"));
             rateRepository.deleteById(Id);
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -62,7 +62,7 @@ public class RateService {
             rateRepository.findById(rate.getId()).orElseThrow(()->new ResourceNotExistException("Rate"));
             rateRepository.save(rate);
 
-        }catch(Exception ex){
+        }catch(ResourceNotExistException ex){
             throw ex;
         }
     }
@@ -76,7 +76,7 @@ public class RateService {
            }else{
                throw new ResourceNotExistException("Area Code");
            }
-       } catch (Exception ex) {
+       } catch (ResourceNotExistException ex) {
            throw ex;
        }
     }

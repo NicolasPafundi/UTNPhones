@@ -17,6 +17,7 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -97,7 +98,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getByUserNameAndPassword() throws ValidationException, InvalidLoginException {
+    public void getByUserNameAndPasswordOk() throws ValidationException, InvalidLoginException, Exception {
         User user = new User();
         user.setId(1);
         user.setFirstName("name");
@@ -170,5 +171,69 @@ public class UserServiceTest {
 
         verify(UserRepository, times(1)).findById(1);
         verify(UserRepository, times(1)).save(user);
+    }
+
+    @Test(expected = Exception.class)
+    public void GetAllException() {
+        when(UserRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<User> returnedUsers= service.getAll();
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getAllByUserTypeException() throws ResourceNotExistException, Exception {
+        when(userTypeRepository.findById(1)).thenReturn(Optional.empty());
+        List<User> returnedUsers= service.getAllByUserType(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(UserRepository.findById(1)).thenReturn(Optional.empty());
+        User returnedUser= service.getById(1);
+    }
+
+    @Test(expected = Exception.class)
+    public void getByUserNameAndPasswordException() throws ValidationException, InvalidLoginException, Exception {
+        LoginInput loginInput = new LoginInput();
+        loginInput.setUserName("test");
+        loginInput.setPassword("test");
+
+        when(UserRepository.getByUserNameAndPassword("test","test")).thenThrow((Class<? extends Throwable>) null);
+        User returnedUser= service.getByUserNameAndPassword(loginInput);
+    }
+
+    @Test(expected = ResourceAlreadyExistExeption.class)
+    public void addException() throws Exception, ResourceAlreadyExistExeption, ValidationException {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        UserType UserType = new UserType();
+        UserType.setId(1);
+        UserType.setName(UserTypes.CLIENT);
+        user.setUserType(UserType);
+
+        when(UserRepository.existsById(1)).thenReturn(true);
+        int returnedId= service.add(user);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, Exception {
+        when(UserRepository.findById(1)).thenReturn(Optional.empty());
+        service.remove(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, Exception, ValidationException {
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("name");
+        user.setLastName("lastName");
+        UserType UserType = new UserType();
+        UserType.setId(1);
+        UserType.setName(UserTypes.CLIENT);
+        user.setUserType(UserType);
+
+        when(UserRepository.findById(1)).thenReturn(Optional.empty());
+        service.update(user);
     }
 }

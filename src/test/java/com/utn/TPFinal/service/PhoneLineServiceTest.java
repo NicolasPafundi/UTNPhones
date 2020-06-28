@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -152,5 +154,59 @@ public class PhoneLineServiceTest {
 
         verify(PhoneLineRepository, times(1)).findById(1);
         verify(PhoneLineRepository, times(1)).save(PhoneLine);
+    }
+
+    @Test(expected = Exception.class)
+    public void GetAllException() throws ResourceNotExistException, ResourceNotExistException {
+        when(PhoneLineRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<PhoneLine> returnedPhoneLines= service.getAll();
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByUserIDException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<PhoneLine> returnedPhoneLines= service.getByUser(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(PhoneLineRepository.findById(1)).thenReturn(Optional.empty());
+        PhoneLine returnedPhoneLine= service.getById(1);
+    }
+
+    @Test(expected = ResourceAlreadyExistExeption.class)
+    public void addException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption, ValidationException {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+        PhoneLine.setNumberLine(1);
+        PhoneLine.setActive(true);
+        PhoneLineType phoneLineType = new PhoneLineType();
+        phoneLineType.setId(1);
+        phoneLineType.setName(PhoneLineTypes.MOVIL);
+        PhoneLine.setPhoneLineType(phoneLineType);
+
+        when(PhoneLineRepository.existsById(1)).thenReturn(true);
+        int returnedId= service.add(PhoneLine);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        when(PhoneLineRepository.findById(1)).thenReturn(Optional.empty());
+        service.remove(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption, ValidationException {
+        PhoneLine PhoneLine = new PhoneLine();
+        PhoneLine.setId(1);
+        PhoneLine.setNumberLine(1);
+        PhoneLine.setActive(true);
+        PhoneLineType phoneLineType = new PhoneLineType();
+        phoneLineType.setId(1);
+        phoneLineType.setName(PhoneLineTypes.MOVIL);
+        PhoneLine.setPhoneLineType(phoneLineType);
+
+        when(PhoneLineRepository.findById(1)).thenReturn(Optional.empty());
+        service.update(PhoneLine);
     }
 }

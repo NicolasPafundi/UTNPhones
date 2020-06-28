@@ -17,6 +17,8 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -128,5 +130,36 @@ public class MobileReportServiceTest {
 
         verify(userRepository, times(1)).findById(1);
         verify(mobileReportRepository, times(1)).getDestinationRankByUser(1,10);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void TestGetCallsByUserByDateException() throws ResourceNotExistException, ResourceNotExistException {
+        Date date = new Date();
+        MobileReportFilter mobileReportFilter = new MobileReportFilter();
+        mobileReportFilter.setDateFrom(date);
+        mobileReportFilter.setDateTo(date);
+
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<MobileReportUserCalls> returnedMobileReportUserCallsList= service.getCallsByUserByDate(mobileReportFilter.getDateFrom(),mobileReportFilter.getDateTo(),1);
+
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getBillsByUserByDateException() throws ResourceNotExistException, ResourceNotExistException {
+        Date date = new Date();
+
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<MobileReportUserBills> returnedMobileReportUserBillsList= service.getBillsByUserByDate(date,date,1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getDestinationRankByUserException() throws ResourceNotExistException, ResourceNotExistException {
+
+        MobileReportUserCallsRank mobileReportUserCallsRank = factory.createProjection(MobileReportUserCallsRank.class);
+        mobileReportUserCallsRank.setCallAmount(1);
+        mobileReportUserCallsRank.setDestination("1");
+
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<MobileReportUserCallsRank> returnedMobileReportUserCallsRanks= service.getDestinationRankByUser(1,10);
     }
 }

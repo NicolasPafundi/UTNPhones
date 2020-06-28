@@ -6,15 +6,11 @@ import com.utn.TPFinal.exceptions.ResourceNotExistException;
 import com.utn.TPFinal.model.dtos.CallInput;
 import com.utn.TPFinal.model.dtos.CallsReportFilter;
 import com.utn.TPFinal.model.entities.Call;
-import com.utn.TPFinal.model.entities.Call;
 import com.utn.TPFinal.model.entities.User;
 import com.utn.TPFinal.model.projections.InfraResponse;
-import com.utn.TPFinal.model.projections.MobileReportUserCalls;
 import com.utn.TPFinal.model.projections.ReportCallsByUserByDate;
 import com.utn.TPFinal.repositories.ICallRepository;
-import com.utn.TPFinal.repositories.ICallRepository;
 import com.utn.TPFinal.repositories.IUserRepository;
-import com.utn.TPFinal.services.CallService;
 import com.utn.TPFinal.services.CallService;
 import org.junit.Before;
 import org.mockito.Mock;
@@ -24,6 +20,7 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -203,5 +200,65 @@ public class CallServiceTest {
 
         verify(userRepository, times(1)).findById(1);
         verify(CallRepository, times(1)).getReportCallsByUserByDate(callsReportFilter.getUserId(),callsReportFilter.getDateFrom(),callsReportFilter.getDateTo());
+    }
+
+    @Test(expected = Exception.class)
+    public void GetAllException() throws ResourceNotExistException, ResourceNotExistException {
+        when(CallRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<Call> returnedCalls= service.getAll();
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByUserIDException() throws ResourceNotExistException, ResourceNotExistException {
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<Call> returnedCalls= service.getByUserId(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(CallRepository.findById(1)).thenReturn(Optional.empty());
+        Call returnedCall= service.getById(1);
+    }
+
+    @Test(expected = Exception.class)
+    public void addException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        CallInput callInput = new CallInput();
+        callInput.setNumberTo(1);
+        callInput.setNumberFrom(1);
+        callInput.setDuration(1);
+        callInput.setCallDate(new Date());
+
+        when(CallRepository.createCall(callInput.getNumberFrom(),callInput.getNumberTo(),callInput.getDuration(),callInput.getCallDate())).thenThrow((Class<? extends Throwable>) null);
+        InfraResponse returnedInfraResponse= service.createCall(callInput);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        when(CallRepository.findById(1)).thenReturn(Optional.empty());
+        service.remove(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        Call Call = new Call();
+        Call.setId(1);
+        Call.setAmount(1);
+        Call.setDuration(1);
+        Call.setCreatedOn(new Date());
+
+
+        when(CallRepository.findById(1)).thenReturn(Optional.empty());
+        service.update(Call);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getReportCallsByUserByDateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        CallsReportFilter callsReportFilter = new CallsReportFilter();
+        callsReportFilter.setUserId(1);
+        callsReportFilter.setDateTo(new Date());
+        callsReportFilter.setDateFrom(new Date());
+
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<ReportCallsByUserByDate> reponseReportCallsByUserByDateList= service.getReportCallsByUserByDate(callsReportFilter);
     }
 }

@@ -10,18 +10,13 @@ import com.utn.TPFinal.repositories.IBillRepository;
 import com.utn.TPFinal.repositories.IMobileReportRepository;
 import com.utn.TPFinal.repositories.IUserRepository;
 import com.utn.TPFinal.services.BillService;
-import com.utn.TPFinal.services.MobileReportService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -167,5 +162,57 @@ public class BillServiceTest {
 
         verify(billRepository, times(1)).findById(1);
         verify(billRepository, times(1)).save(bill);
+    }
+
+    @Test(expected = Exception.class)
+    public void GetAllException() throws ResourceNotExistException, ResourceNotExistException {
+        when(billRepository.findAll()).thenThrow((Class<? extends Throwable>) null);
+        List<Bill> returnedBills= service.getAll();
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByUserIDException() throws ResourceNotExistException, ResourceNotExistException {
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+        List<Bill> returnedBills= service.getByUserID(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void getByIdException() throws ResourceNotExistException, ResourceNotExistException, Exception {
+        when(billRepository.findById(1)).thenReturn(Optional.empty());
+        Bill returnedBill= service.getById(1);
+    }
+
+    @Test(expected = ResourceAlreadyExistExeption.class)
+    public void addException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        Bill bill = new Bill();
+        bill.setId(1);
+        bill.setCallsAmount(1);
+        bill.setCreatedOn(new Date());
+        bill.setPaid(false);
+        bill.setPriceCost(1);
+        bill.setPriceFinal(1);
+
+        when(billRepository.existsById(1)).thenReturn(true);
+        int returnedId= service.add(bill);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void removeException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        when(billRepository.findById(1)).thenReturn(Optional.empty());
+        service.remove(1);
+    }
+
+    @Test(expected = ResourceNotExistException.class)
+    public void updateException() throws ResourceNotExistException, ResourceNotExistException, Exception, ResourceAlreadyExistExeption {
+        Bill bill = new Bill();
+        bill.setId(1);
+        bill.setCallsAmount(1);
+        bill.setCreatedOn(new Date());
+        bill.setPaid(false);
+        bill.setPriceCost(1);
+        bill.setPriceFinal(1);
+
+        when(billRepository.findById(1)).thenReturn(Optional.empty());
+        service.update(bill);
     }
 }
