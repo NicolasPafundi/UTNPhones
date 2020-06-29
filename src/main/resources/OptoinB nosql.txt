@@ -19,8 +19,10 @@ BUCKET_DATA : [
 	"lastName" : "Garcia",
 	"dni" : "12345678",
 	"type" : "Cliente",
-	"city" : {
-				"name" : "Mar del Plata",
+	"Address" : {
+	            "Street" : "Sagastizabal 6358",
+				"City" : "Mar del Plata",
+				"PostalCode" : "7600",
 				"State" : "Buenos Aires",
 				"Country" : "Argentina"
 			 },

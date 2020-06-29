@@ -139,32 +139,17 @@ DELIMITER ;
 /*-------------------------- Bill Action --------------------------*/
 /*Bill Action el Job de Mysql llama una vez por mes al SP sp_monthlybills(), este SP hace un cursor por cada linea y llama al SP sp_billingCallbyline por cada linea y busca sus llamadas sin facturar   */
 
-/* sp_facturarllamadasxlinea */
+/* Billing event*/
 
 DELIMITER $$
-CREATE PROCEDURE `sp_billingCallByLine`(IN `phonelineid` INT)
-begin
-
-	/*Get calls to be billed*/
-	create temporary table callswithoutbill
-	select id from calls c where c.lineid_from = phonelineid and bill_id is null;
-
-	/*Create the bill */
-	insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon)
-	select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now()
-	from calls c
-		inner join callswithoutbill temp on c.id = temp.id
-		inner join phonelines pl on c.lineid_from = pl.id
-	where pl.id = phonelineid and c.bill_id is null
-	group by pl.id ;
-
-	/*Update the calls billed*/
-	update calls
-	inner join callswithoutbill temp on calls.id = temp.id
-	set calls.bill_id = LAST_INSERT_ID();
-	drop table callswithoutbill;
-
-end$$
+CREATE EVENT ev_monthbilling
+ON SCHEDULE EVERY 1 MONTH
+STARTS '2020-06-01 03:00:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+call sp_monthlyBills();
+END$$
 DELIMITER ;
 
 /* sp_monthlybills() */
@@ -196,17 +181,32 @@ begin
 end$$
 DELIMITER ;
 
-/* Billing event*/
+/* sp_facturarllamadasxlinea */
 
 DELIMITER $$
-CREATE EVENT ev_monthbilling
-ON SCHEDULE EVERY 1 MONTH
-STARTS '2020-06-01 03:00:00.000'
-ON COMPLETION NOT PRESERVE
-ENABLE
-DO BEGIN
-call sp_monthlyBills();
-END$$
+CREATE PROCEDURE `sp_billingCallByLine`(IN `phonelineid` INT)
+begin
+
+	/*Get calls to be billed*/
+	create temporary table callswithoutbill
+	select id from calls c where c.lineid_from = phonelineid and bill_id is null;
+
+	/*Create the bill */
+	insert into bills (phoneline_id,user_id, calls_amount,price_cost, price_final,payday,createdon)
+	select pl.id , pl.user_id , count(pl.id) as "calls_amount", sum(c.amount),sum(c.amount*1.21),(CURDATE() + INTERVAL 15 DAY ),now()
+	from calls c
+		inner join callswithoutbill temp on c.id = temp.id
+		inner join phonelines pl on c.lineid_from = pl.id
+	where pl.id = phonelineid and c.bill_id is null
+	group by pl.id ;
+
+	/*Update the calls billed*/
+	update calls
+	inner join callswithoutbill temp on calls.id = temp.id
+	set calls.bill_id = LAST_INSERT_ID();
+	drop table callswithoutbill;
+
+end$$
 DELIMITER ;
 
 ------------------------------------------------------------------------------------------------------------------------

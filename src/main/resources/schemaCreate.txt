@@ -140,3 +140,6 @@ CREATE TABLE `calls` (
   CONSTRAINT `calls_lineidto_fk` FOREIGN KEY (`lineid_to`) REFERENCES `phonelines` (`id`),
   CONSTRAINT `calls_rates_fk` FOREIGN KEY (`rate_id`) REFERENCES `rates` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+CREATE INDEX idx_calls_date on calls(createdon) USING BTREE;
+CREATE INDEX idx_bills_date on calls(createdon) USING BTREE;
